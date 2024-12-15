@@ -45,22 +45,13 @@
             color: white;
             font-size: 40px;
             font-weight: bold;
-            margin-top: 30px;
+            margin-top: 20px;
             opacity: 0;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
         .counter.active {
             opacity: 1;
             transform: scale(1);
-        }
-        .tab-content {
-            display: none;
-            width: 100%;
-            text-align: center;
-            color: white;
-        }
-        .tab-content.active {
-            display: block;
         }
         /* Нижнее меню */
         .bottom-menu {
@@ -100,24 +91,27 @@
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
-        /* Стиль для gif анимации */
-        .greeting-gif {
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 30px;
+        /* Анимация для приветствия */
+        .greeting {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .greeting h1 {
+            font-size: 32px;
         }
     </style>
 </head>
 <body>
-    <!-- Вкладка приветствия -->
-    <div id="greeting" class="tab-content active">
+    <!-- Приветствие -->
+    <div id="greeting" class="greeting">
         <h1>Загрузка...</h1>
-        <img src="https://media.giphy.com/media/d2jjuAZzvVAG5e4k/giphy.gif" alt="Топчут сигарету" class="greeting-gif">
     </div>
 
-    <!-- Основной контент после приветствия -->
-    <div id="mainContent" class="tab-content">
-        <h1 id="welcomeMessage">Привет, пользователь!</h1>
+    <!-- Основной контент -->
+    <div id="mainContent" class="tab-content" style="display: none;">
+        <h1 id="welcomeMessage"></h1>
         <button id="checkin">Сделать чек-ин</button>
         <div id="checkin-count" class="counter">0</div>
     </div>
@@ -163,14 +157,16 @@
         const user = tg.initDataUnsafe?.user || { first_name: "Пользователь" };
         const userId = user.id || "default_user";
 
+        // Приветствие с именем пользователя
         document.getElementById('welcomeMessage').innerText = `Привет, ${user.first_name}!`;
 
-        // Время для загрузки приветствия
+        // Приветствие на экране, скрытие через 2 секунды
         setTimeout(() => {
-            document.getElementById('greeting').classList.remove('active');
-            document.getElementById('mainContent').classList.add('active');
-        }, 3000); // Задержка 3 секунды для отображения приветствия
+            document.getElementById('greeting').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+        }, 2000); // Задержка 2 секунды для приветствия
 
+        // Счетчик чек-инов
         const counterElement = document.getElementById('checkin-count');
         let checkinData = JSON.parse(localStorage.getItem('checkinData')) || {};
 
@@ -204,8 +200,8 @@
 
         // Функция переключения вкладок
         function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(`${tabName}Content`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            document.getElementById(`${tabName}Content`).style.display = 'block';
         }
     </script>
 </body>
