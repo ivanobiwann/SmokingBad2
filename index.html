@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 0;
+            padding: 20px;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -19,32 +19,38 @@
             background-color: #1E1E1E;
             color: white;
         }
-        #greeting-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-        #greeting {
-            font-size: 24px;
+        h1 {
             color: #1E90FF;
         }
-        #loading-img {
-            width: 150px;
-            height: 150px;
-            animation: fadeIn 1.5s ease-in-out infinite alternate;
+        button {
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
-        @keyframes fadeIn {
-            from {
-                opacity: 0.5;
-            }
-            to {
-                opacity: 1;
-            }
+        button:hover {
+            background-color: #1C86EE;
         }
-        #mainContent {
-            display: none;
+        .counter {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50%;
+            background-color: #1E90FF;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 30px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        .counter.active {
+            opacity: 1;
+            transform: scale(1);
         }
         .tab-content {
             display: none;
@@ -64,9 +70,6 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            box-sizing: border-box;
-            padding-left: 15px;
-            padding-right: 15px;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
         }
         .menu-item {
@@ -95,99 +98,114 @@
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
+
+        /* Приветствие */
+        #greeting {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #1E90FF;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <!-- Приветствие -->
-    <div id="greeting-container">
-        <h1 id="greeting">Загрузка...</h1>
-        <!-- Анимированная картинка (GIF с топчущей сигаретой) -->
-        <img id="loading-img" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Загрузка...">
-    </div>
+    <h1 id="greeting">Добро пожаловать в Quit Smoking App!</h1>
 
     <!-- Основной контент -->
-    <div id="mainContent">
-        <!-- Главная -->
+    <div id="mainContent" style="display: none;">
+        <!-- Вкладка Главная -->
         <div id="homeContent" class="tab-content active">
             <h2>Главная</h2>
-            <p>Добро пожаловать! Следите за своим прогрессом каждый день.</p>
+            <p>Следите за своим прогрессом каждый день!</p>
             <button id="checkin">Сделать чек-ин</button>
             <div id="checkin-count" class="counter">0</div>
         </div>
-    </div>
 
-    <!-- Нижнее меню -->
-    <nav class="bottom-menu">
-        <div class="menu-item" onclick="showTab('home')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная">
-            </div>
-            Главная
+        <!-- Другие вкладки -->
+        <div id="rankingContent" class="tab-content">
+            <h2>Рейтинг</h2>
+            <p>Здесь будет информация о вашем рейтинге.</p>
         </div>
-        <div class="menu-item" onclick="showTab('ranking')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг">
-            </div>
-            Рейтинг
+        <div id="rewardsContent" class="tab-content">
+            <h2>Награды</h2>
+            <p>Здесь будут отображаться ваши награды.</p>
         </div>
-        <div class="menu-item" onclick="showTab('rewards')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды">
-            </div>
-            Награды
+        <div id="friendsContent" class="tab-content">
+            <h2>Друзья</h2>
+            <p>Здесь можно увидеть ваших друзей.</p>
         </div>
-        <div class="menu-item" onclick="showTab('friends')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/?size=100&id=0Zv7j2328VJP&format=png&color=000000" alt="Друзья">
-            </div>
-            Друзья
+        <div id="profileContent" class="tab-content">
+            <h2>Профиль</h2>
+            <p>Здесь будет информация о вашем профиле.</p>
         </div>
-        <div class="menu-item" onclick="showTab('profile')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
+
+        <!-- Нижнее меню -->
+        <nav class="bottom-menu">
+            <div class="menu-item" onclick="showTab('home')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная">
+                </div>
+                Главная
             </div>
-            Профиль
-        </div>
-    </nav>
+            <div class="menu-item" onclick="showTab('ranking')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг">
+                </div>
+                Рейтинг
+            </div>
+            <div class="menu-item" onclick="showTab('rewards')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды">
+                </div>
+                Награды
+            </div>
+            <div class="menu-item" onclick="showTab('friends')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Друзья">
+                </div>
+                Друзья
+            </div>
+            <div class="menu-item" onclick="showTab('profile')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
+                </div>
+                Профиль
+            </div>
+        </nav>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const user = tg.initDataUnsafe?.user || { first_name: "Пользователь" };
-        const greetingElement = document.getElementById('greeting');
-        const greetingContainer = document.getElementById('greeting-container');
+        const greeting = document.getElementById('greeting');
         const mainContent = document.getElementById('mainContent');
 
-        // Показ приветствия с именем пользователя
-        greetingElement.innerText = `Привет, ${user.first_name}! Каждый день без сигарет — шаг к лучшему здоровью.`;
-
+        // Показать приветствие на несколько секунд
+        greeting.style.display = 'block';
         setTimeout(() => {
-            greetingContainer.style.display = "none";
-            mainContent.style.display = "block";
+            greeting.style.display = 'none';
+            mainContent.style.display = 'block';
         }, 3000);
 
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || {};
-        const userId = user.id || "default_user";
+        let checkinData = JSON.parse(sessionStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
         const today = new Date().toISOString().split('T')[0];
 
-        if (!checkinData[userId]) {
-            checkinData[userId] = { count: 0, lastCheckin: null };
-        }
-        const userCheckin = checkinData[userId];
-
         function updateCounter() {
-            counterElement.innerText = userCheckin.count;
+            counterElement.innerText = checkinData.count;
+            counterElement.classList.add('active');
         }
-        updateCounter();
 
         document.getElementById('checkin').onclick = () => {
-            if (userCheckin.lastCheckin !== today) {
-                userCheckin.count++;
-                userCheckin.lastCheckin = today;
-                checkinData[userId] = userCheckin;
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));
+            if (checkinData.lastCheckin !== today) {
+                checkinData.count++;
+                checkinData.lastCheckin = today;
+                sessionStorage.setItem('checkinData', JSON.stringify(checkinData));
                 updateCounter();
                 alert("Чек-ин выполнен!");
             } else {
@@ -195,11 +213,12 @@
             }
         };
 
-        // Функция переключения вкладок
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
+
+        updateCounter();
     </script>
 </body>
 </html>
