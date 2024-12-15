@@ -88,6 +88,7 @@
             bottom: 0;
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+            display: none; /* Скрыто во время загрузки */
         }
         .menu-item {
             display: flex;
@@ -135,7 +136,7 @@
     </div>
 
     <!-- Нижнее меню -->
-    <nav class="bottom-menu">
+    <nav class="bottom-menu" id="bottomMenu">
         <div class="menu-item" onclick="showTab('home')">
             <div class="menu-icon">
                 <img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная">
@@ -182,6 +183,7 @@
         setTimeout(() => {
             document.getElementById('greetingContent').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('bottomMenu').style.display = 'flex'; // Показываем меню
         }, 2000); // Задержка 2 секунды для приветствия
 
         // Приветствие на главной вкладке
