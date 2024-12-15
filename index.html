@@ -63,7 +63,7 @@
         }
         /* Нижнее меню */
         .bottom-menu {
-            display: none; /* Скрываем меню до загрузки */
+            display: flex;
             justify-content: space-around;
             align-items: center;
             background-color: #2E2E2E;
@@ -114,10 +114,34 @@
     </div>
 
     <!-- Вкладка главная -->
-    <div id="mainContent" class="tab-content">
+    <div id="homeContent" class="tab-content">
         <h2>Главная</h2>
         <button id="checkin">Сделать чек-ин</button>
         <div id="checkin-count" class="counter">0</div>
+    </div>
+
+    <!-- Вкладка рейтинг -->
+    <div id="rankingContent" class="tab-content">
+        <h2>Рейтинг</h2>
+        <p>Здесь будет информация о вашем рейтинге.</p>
+    </div>
+
+    <!-- Вкладка награды -->
+    <div id="rewardsContent" class="tab-content">
+        <h2>Награды</h2>
+        <p>Здесь будут отображаться ваши награды.</p>
+    </div>
+
+    <!-- Вкладка друзья -->
+    <div id="friendsContent" class="tab-content">
+        <h2>Друзья</h2>
+        <p>Здесь можно увидеть ваших друзей.</p>
+    </div>
+
+    <!-- Вкладка профиль -->
+    <div id="profileContent" class="tab-content">
+        <h2>Профиль</h2>
+        <p>Здесь будет информация о вашем профиле.</p>
     </div>
 
     <!-- Нижнее меню -->
@@ -164,7 +188,7 @@
         // Скрываем вкладку приветствия через 2 секунды и показываем главную вкладку
         setTimeout(() => {
             document.getElementById('greetingContent').style.display = 'none'; // Скрываем приветствие
-            document.getElementById('mainContent').style.display = 'block';   // Показываем основное содержимое
+            document.getElementById('homeContent').style.display = 'block';   // Показываем основное содержимое
             document.getElementById('bottomMenu').style.display = 'flex';      // Показываем нижнее меню
         }, 2000); // Задержка 2 секунды для приветствия
 
