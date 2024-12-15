@@ -9,13 +9,13 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
+            padding: 0;
             margin: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             background-color: #1E1E1E;
             color: white;
         }
@@ -36,15 +36,18 @@
             background-color: #1C86EE;
         }
         .counter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100px;
             height: 100px;
             line-height: 100px;
+            margin: 20px auto; /* Центрирование */
             border-radius: 50%;
             background-color: #1E90FF;
             color: white;
             font-size: 40px;
             font-weight: bold;
-            margin-top: 30px;
             opacity: 0;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
@@ -69,8 +72,10 @@
             padding: 10px 0;
             position: fixed;
             bottom: 0;
+            left: 0;
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
         }
         .menu-item {
             display: flex;
@@ -98,7 +103,6 @@
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
-
         /* Приветствие */
         #greeting {
             position: absolute;
@@ -107,6 +111,7 @@
             transform: translate(-50%, -50%);
             font-size: 24px;
             color: #1E90FF;
+            text-align: center;
             display: none;
         }
     </style>
@@ -125,19 +130,25 @@
             <div id="checkin-count" class="counter">0</div>
         </div>
 
-        <!-- Другие вкладки -->
+        <!-- Вкладка Рейтинг -->
         <div id="rankingContent" class="tab-content">
             <h2>Рейтинг</h2>
             <p>Здесь будет информация о вашем рейтинге.</p>
         </div>
+
+        <!-- Вкладка Награды -->
         <div id="rewardsContent" class="tab-content">
             <h2>Награды</h2>
             <p>Здесь будут отображаться ваши награды.</p>
         </div>
+
+        <!-- Вкладка Друзья -->
         <div id="friendsContent" class="tab-content">
             <h2>Друзья</h2>
             <p>Здесь можно увидеть ваших друзей.</p>
         </div>
+
+        <!-- Вкладка Профиль -->
         <div id="profileContent" class="tab-content">
             <h2>Профиль</h2>
             <p>Здесь будет информация о вашем профиле.</p>
@@ -163,64 +174,4 @@
                 </div>
                 Награды
             </div>
-            <div class="menu-item" onclick="showTab('friends')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Друзья">
-                </div>
-                Друзья
-            </div>
-            <div class="menu-item" onclick="showTab('profile')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
-                </div>
-                Профиль
-            </div>
-        </nav>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        const user = tg.initDataUnsafe?.user || { first_name: "Гость" };
-        const greeting = document.getElementById('greeting');
-        const mainContent = document.getElementById('mainContent');
-
-        // Показать приветствие с именем пользователя
-        greeting.innerText = `Привет, ${user.first_name}! Добро пожаловать в Quit Smoking App!`;
-        greeting.style.display = 'block';
-        setTimeout(() => {
-            greeting.style.display = 'none';
-            mainContent.style.display = 'block';
-        }, 3000);
-
-        const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(sessionStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
-        const today = new Date().toISOString().split('T')[0];
-
-        function updateCounter() {
-            counterElement.innerText = checkinData.count;
-            counterElement.classList.add('active');
-        }
-
-        document.getElementById('checkin').onclick = () => {
-            if (checkinData.lastCheckin !== today) {
-                checkinData.count++;
-                checkinData.lastCheckin = today;
-                sessionStorage.setItem('checkinData', JSON.stringify(checkinData));
-                updateCounter();
-                alert("Чек-ин выполнен!");
-            } else {
-                alert("Вы уже сделали чек-ин сегодня.");
-            }
-        };
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(`${tabName}Content`).classList.add('active');
-        }
-
-        updateCounter();
-    </script>
-</body>
-</html>
+            <div
