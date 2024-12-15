@@ -5,220 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quit Smoking App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 20px;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            margin: 0; padding: 0;
             background-color: #1E1E1E;
-            color: white;
+            color: white; overflow: hidden;
         }
-        h1 {
-            color: #1E90FF;
+        #greeting-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: #1E90FF; color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; z-index: 1000;
+            animation: fadeOut 2s 3s forwards; /* Исчезает через 2 секунды после 3-секундной паузы */
         }
-        button {
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #1C86EE;
-        }
-        .counter {
-            width: 100px;
-            height: 100px;
-            line-height: 100px;
-            border-radius: 50%;
-            background-color: #1E90FF;
-            color: white;
-            font-size: 40px;
-            font-weight: bold;
-            margin-top: 30px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
-        .counter.active {
-            opacity: 1;
-            transform: scale(1);
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
         }
         .tab-content {
-            display: none;
-            width: 100%;
-            text-align: center;
+            display: none; text-align: center; margin-top: 50px;
         }
-        .tab-content.active {
-            display: block;
+        .tab-content.active { display: block; }
+        h1 { color: #1E90FF; }
+        button {
+            background-color: #1E90FF; color: white; border: none;
+            padding: 15px 30px; font-size: 20px; cursor: pointer; border-radius: 10px;
         }
-        /* Нижнее меню */
+        button:hover { background-color: #1C86EE; }
+        .counter {
+            width: 100px; height: 100px; line-height: 100px;
+            margin: 30px auto; border-radius: 50%;
+            background-color: #1E90FF; color: white;
+            font-size: 40px; font-weight: bold;
+        }
         .bottom-menu {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: #2E2E2E;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+            display: flex; justify-content: space-around;
+            background-color: #2E2E2E; position: fixed;
+            bottom: 0; width: 100%; padding: 10px 0;
         }
         .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: white;
-            font-size: 12px;
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: white; font-size: 12px;
         }
         .menu-icon {
-            background-color: #1E90FF;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 5px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: #1E90FF; display: flex;
+            justify-content: center; align-items: center;
         }
-        .menu-icon img {
-            width: 24px;
-            height: 24px;
-            filter: brightness(0) invert(1);
-        }
-        .menu-item:hover .menu-icon {
-            background-color: #1C86EE;
-        }
-
-        /* Приветствие */
-        #greeting {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: #1E90FF;
-            display: none;
-        }
+        .menu-icon img { width: 24px; height: 24px; filter: brightness(0) invert(1); }
     </style>
 </head>
 <body>
-    <!-- Приветствие -->
-    <h1 id="greeting">Добро пожаловать в Quit Smoking App!</h1>
+    <!-- Приветственный экран -->
+    <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
 
-    <!-- Основной контент -->
-    <div id="mainContent" style="display: none;">
-        <!-- Вкладка Главная -->
-        <div id="homeContent" class="tab-content active">
-            <h2>Главная</h2>
-            <p>Следите за своим прогрессом каждый день!</p>
-            <button id="checkin">Сделать чек-ин</button>
-            <div id="checkin-count" class="counter">0</div>
-        </div>
-
-        <!-- Другие вкладки -->
-        <div id="rankingContent" class="tab-content">
-            <h2>Рейтинг</h2>
-            <p>Здесь будет информация о вашем рейтинге.</p>
-        </div>
-        <div id="rewardsContent" class="tab-content">
-            <h2>Награды</h2>
-            <p>Здесь будут отображаться ваши награды.</p>
-        </div>
-        <div id="friendsContent" class="tab-content">
-            <h2>Друзья</h2>
-            <p>Здесь можно увидеть ваших друзей.</p>
-        </div>
-        <div id="profileContent" class="tab-content">
-            <h2>Профиль</h2>
-            <p>Здесь будет информация о вашем профиле.</p>
-        </div>
-
-        <!-- Нижнее меню -->
-        <nav class="bottom-menu">
-            <div class="menu-item" onclick="showTab('home')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная">
-                </div>
-                Главная
-            </div>
-            <div class="menu-item" onclick="showTab('ranking')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг">
-                </div>
-                Рейтинг
-            </div>
-            <div class="menu-item" onclick="showTab('rewards')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды">
-                </div>
-                Награды
-            </div>
-            <div class="menu-item" onclick="showTab('friends')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Друзья">
-                </div>
-                Друзья
-            </div>
-            <div class="menu-item" onclick="showTab('profile')">
-                <div class="menu-icon">
-                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
-                </div>
-                Профиль
-            </div>
-        </nav>
+    <!-- Вкладка Главная -->
+    <div id="homeContent" class="tab-content active">
+        <h1>Главная</h1>
+        <button id="checkin">Сделать чек-ин</button>
+        <div id="checkin-count" class="counter">0</div>
     </div>
+
+    <!-- Вкладка Рейтинг -->
+    <div id="rankingContent" class="tab-content">
+        <h1>Рейтинг</h1>
+        <p>Здесь будет информация о рейтинге.</p>
+    </div>
+
+    <!-- Вкладка Награды -->
+    <div id="rewardsContent" class="tab-content">
+        <h1>Награды</h1>
+        <p>Ваши достижения будут здесь.</p>
+    </div>
+
+    <!-- Вкладка Статистика -->
+    <div id="statsContent" class="tab-content">
+        <h1>Статистика</h1>
+        <canvas id="progressChart" width="300" height="300"></canvas>
+    </div>
+
+    <!-- Вкладка Профиль -->
+    <div id="profileContent" class="tab-content">
+        <h1>Профиль</h1>
+        <p>Информация о вашем профиле.</p>
+    </div>
+
+    <!-- Нижнее меню -->
+    <nav class="bottom-menu">
+        <div class="menu-item" onclick="showTab('home')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная"></div> Главная
+        </div>
+        <div class="menu-item" onclick="showTab('ranking')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг"></div> Рейтинг
+        </div>
+        <div class="menu-item" onclick="showTab('rewards')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды"></div> Награды
+        </div>
+        <div class="menu-item" onclick="showTab('stats')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" alt="Статистика"></div> Статистика
+        </div>
+        <div class="menu-item" onclick="showTab('profile')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль"></div> Профиль
+        </div>
+    </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const greeting = document.getElementById('greeting');
-        const mainContent = document.getElementById('mainContent');
-
-        // Показать приветствие на несколько секунд
-        greeting.style.display = 'block';
-        setTimeout(() => {
-            greeting.style.display = 'none';
-            mainContent.style.display = 'block';
-        }, 3000);
-
+        // Чек-ин логика
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(sessionStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
         const today = new Date().toISOString().split('T')[0];
 
         function updateCounter() {
             counterElement.innerText = checkinData.count;
-            counterElement.classList.add('active');
         }
-
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
                 checkinData.count++;
                 checkinData.lastCheckin = today;
-                sessionStorage.setItem('checkinData', JSON.stringify(checkinData));
+                localStorage.setItem('checkinData', JSON.stringify(checkinData));
                 updateCounter();
                 alert("Чек-ин выполнен!");
             } else {
                 alert("Вы уже сделали чек-ин сегодня.");
             }
         };
+        updateCounter();
 
+        // Функция для переключения вкладок
         function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
-
-        updateCounter();
     </script>
 </body>
 </html>
