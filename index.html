@@ -143,10 +143,8 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Инициализация данных чек-инов
+        // Загружаем данные чек-инов из localStorage или создаем их
         let checkinData = JSON.parse(localStorage.getItem('checkinData'));
-
-        // Если данные еще не существуют в localStorage, создаем их
         if (!checkinData) {
             checkinData = { count: 0, lastCheckin: null };
             localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
