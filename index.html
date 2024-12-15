@@ -36,12 +36,11 @@
                 visibility: hidden;
             }
         }
-        .parameters-screen {
+        .hidden {
             display: none;
-            margin-top: 50px;
         }
-        .parameters-screen.active {
-            display: block;
+        .parameters-screen {
+            margin-top: 50px;
         }
         h1 {
             color: #1E90FF;
@@ -63,14 +62,24 @@
         button:hover {
             background-color: #1C86EE;
         }
-        .choice-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px;
+        .tab-content {
+            display: none;
         }
-        .choice-buttons button {
-            padding: 10px;
+        .tab-content.active {
+            display: block;
+        }
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            background-color: #2E2E2E;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 0;
+        }
+        .menu-item {
+            text-decoration: none;
+            color: white;
             font-size: 14px;
         }
     </style>
@@ -80,14 +89,10 @@
     <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
 
     <!-- Экран выбора параметров -->
-    <div id="parameters-screen" class="parameters-screen">
+    <div id="parameters-screen" class="parameters-screen hidden">
         <h1>Выбор параметров</h1>
-
-        <!-- Параметр 1: Календарь -->
         <label for="quitDate">Когда вы начнете бросать:</label>
         <input type="datetime-local" id="quitDate">
-
-        <!-- Параметр 2: Количество сигарет -->
         <label for="cigarettesPerDay">Сколько сигарет в день выкуриваете:</label>
         <select id="cigarettesPerDay">
             <script>
@@ -96,77 +101,81 @@
                 }
             </script>
         </select>
-
-        <!-- Параметр 3: Время первой сигареты -->
         <label>Как скоро после пробуждения вы курите:</label>
-        <div class="choice-buttons">
+        <div>
             <button data-choice="5">В течение 5 минут</button>
             <button data-choice="60">В течение 60 минут</button>
             <button data-choice="more">Больше чем через 60 минут</button>
         </div>
-
         <button id="saveParameters">Сохранить</button>
     </div>
 
-    <!-- Главный экран после параметров -->
-    <div id="main-screen" class="parameters-screen">
-        <h1>Главная</h1>
-        <p>Добро пожаловать в главное приложение!</p>
+    <!-- Основной интерфейс приложения -->
+    <div id="main-screen" class="hidden">
+        <!-- Главная -->
+        <div id="homeContent" class="tab-content active">
+            <h1>Главная</h1>
+            <p>Ваш основной экран приложения.</p>
+        </div>
+
+        <!-- Нижнее меню -->
+        <nav class="bottom-menu">
+            <a href="#" class="menu-item" onclick="showTab('home')">Главная</a>
+            <a href="#" class="menu-item" onclick="showTab('rating')">Рейтинг</a>
+            <a href="#" class="menu-item" onclick="showTab('rewards')">Награды</a>
+            <a href="#" class="menu-item" onclick="showTab('stats')">Статистика</a>
+            <a href="#" class="menu-item" onclick="showTab('profile')">Профиль</a>
+        </nav>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Показываем экран с параметрами после приветственного экрана
-        setTimeout(() => {
-            document.getElementById('parameters-screen').classList.add('active');
-        }, 5000); // Показывается после 5 секунд (3 сек анимация + 2 сек ожидание)
-
-        let userParameters = {
-            quitDate: null,
-            cigarettesPerDay: 1,
-            firstCigaretteTime: null
-        };
-
+        const parametersScreen = document.getElementById('parameters-screen');
+        const mainScreen = document.getElementById('main-screen');
+        const saveButton = document.getElementById('saveParameters');
         const quitDateInput = document.getElementById('quitDate');
         const cigarettesSelect = document.getElementById('cigarettesPerDay');
-        const choiceButtons = document.querySelectorAll('.choice-buttons button');
-        const saveButton = document.getElementById('saveParameters');
+        const choiceButtons = document.querySelectorAll('[data-choice]');
 
-        // Логика выбора времени первой сигареты
+        let userParameters = JSON.parse(localStorage.getItem('userParameters')) || {};
+
+        function showMainScreen() {
+            parametersScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        }
+
+        if (Object.keys(userParameters).length) {
+            showMainScreen(); // Если параметры сохранены, сразу показываем основное приложение
+        } else {
+            parametersScreen.classList.remove('hidden');
+        }
+
         choiceButtons.forEach(button => {
             button.addEventListener('click', () => {
                 userParameters.firstCigaretteTime = button.getAttribute('data-choice');
-                choiceButtons.forEach(b => b.style.backgroundColor = '');
+                choiceButtons.forEach(btn => btn.style.backgroundColor = '');
                 button.style.backgroundColor = '#1E90FF';
             });
         });
 
-        // Сохранение параметров
         saveButton.addEventListener('click', () => {
             userParameters.quitDate = quitDateInput.value || new Date().toISOString();
             userParameters.cigarettesPerDay = cigarettesSelect.value;
 
             if (!userParameters.firstCigaretteTime) {
-                alert("Пожалуйста, выберите время первой сигареты.");
+                alert("Выберите время первой сигареты!");
                 return;
             }
 
             localStorage.setItem('userParameters', JSON.stringify(userParameters));
-            alert("Параметры сохранены!");
-            console.log(userParameters);
-
-            // Переход на главный экран
-            document.getElementById('parameters-screen').classList.remove('active');
-            document.getElementById('main-screen').classList.add('active');
+            showMainScreen();
         });
 
-        // Загрузка данных из localStorage при старте
-        const savedParameters = JSON.parse(localStorage.getItem('userParameters'));
-        if (savedParameters) {
-            userParameters = savedParameters;
-            console.log("Загруженные параметры:", userParameters);
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(`${tabName}Content`).classList.add('active');
         }
     </script>
 </body>
