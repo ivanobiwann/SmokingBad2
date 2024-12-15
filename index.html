@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quit Smoking App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,9 +20,35 @@
             background-color: #1E1E1E;
             color: white;
         }
+
         h1 {
             color: #1E90FF;
         }
+
+        .cssanimation {
+            font-family: 'Ubuntu Mono', monospace;
+            font-size: 50px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Анимация для текста */
+        .lePeek {
+            position: relative;
+            animation: lePeek 2s ease-in-out infinite;
+        }
+
+        @keyframes lePeek {
+            0%, 100% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         button {
             background-color: #1E90FF;
             color: white;
@@ -32,9 +59,11 @@
             border-radius: 10px;
             margin-bottom: 20px;
         }
+
         button:hover {
             background-color: #1C86EE;
         }
+
         .counter {
             width: 100px;
             height: 100px;
@@ -48,19 +77,23 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
+
         .counter.active {
             opacity: 1;
             transform: scale(1);
         }
+
         .tab-content {
             display: none;
             width: 100%;
             text-align: center;
             color: white;
         }
+
         .tab-content.active {
             display: block;
         }
+
         /* Нижнее меню */
         .bottom-menu {
             display: flex;
@@ -73,6 +106,7 @@
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
         }
+
         .menu-item {
             display: flex;
             flex-direction: column;
@@ -81,6 +115,7 @@
             color: white;
             font-size: 12px;
         }
+
         .menu-icon {
             background-color: #1E90FF;
             border-radius: 50%;
@@ -91,14 +126,17 @@
             align-items: center;
             margin-bottom: 5px;
         }
+
         .menu-icon img {
             width: 24px;
             height: 24px;
             filter: brightness(0) invert(1);
         }
+
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
+
         .gif-container {
             margin-top: 20px;
         }
@@ -107,7 +145,7 @@
 <body>
     <!-- Вкладка приветствия -->
     <div id="greetingContent">
-        <h2 id="userGreeting"></h2>
+        <h1 class="cssanimation lePeek">SmokingBad</h1>
         <div class="gif-container">
             <img src="https://media.giphy.com/media/3o7WImL0ZX4iz64G7u/giphy.gif" alt="Topchut sigaretu">
         </div>
@@ -226,8 +264,13 @@
 
         // Функция переключения вкладок
         function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(`${tabName}Content`).classList.add('active');
+            const tabs = ['home', 'ranking', 'rewards', 'friends', 'profile'];
+            tabs.forEach(tab => {
+                const tabContent = document.getElementById(`${tab}Content`);
+                tabContent.classList.remove('active');
+            });
+            const selectedTab = document.getElementById(`${tabName}Content`);
+            selectedTab.classList.add('active');
         }
     </script>
 </body>
