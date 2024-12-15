@@ -19,10 +19,32 @@
             background-color: #1E1E1E;
             color: white;
         }
-        h1 {
-            color: #1E90FF;
+        /* Приветствие */
+        #greetingContent {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #greetingContent h1 {
+            font-size: 32px;
             margin-bottom: 20px;
         }
+        .gif-container {
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Основной контент */
+        #mainContent {
+            display: none;
+            text-align: center;
+        }
+
         button {
             background-color: #1E90FF;
             color: white;
@@ -36,6 +58,7 @@
         button:hover {
             background-color: #1C86EE;
         }
+
         .counter {
             width: 100px;
             height: 100px;
@@ -45,7 +68,7 @@
             color: white;
             font-size: 40px;
             font-weight: bold;
-            margin-top: 30px; /* Увеличиваем отступ, чтобы счетчик был под кнопкой */
+            margin-top: 30px;
             opacity: 0;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
@@ -53,6 +76,7 @@
             opacity: 1;
             transform: scale(1);
         }
+        
         /* Нижнее меню */
         .bottom-menu {
             display: flex;
@@ -91,26 +115,20 @@
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
-        /* Анимация для приветствия */
-        .greeting {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .greeting h1 {
-            font-size: 32px;
-        }
     </style>
 </head>
 <body>
-    <!-- Приветствие -->
-    <div id="greeting" class="greeting">
+    <!-- Вкладка приветствия -->
+    <div id="greetingContent">
         <h1>Загрузка...</h1>
+        <h2 id="userGreeting"></h2>
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/3o7WImL0ZX4iz64G7u/giphy.gif" alt="Topchut sigaretu">
+        </div>
     </div>
 
     <!-- Основной контент -->
-    <div id="mainContent" class="tab-content" style="display: none;">
+    <div id="mainContent">
         <h1 id="welcomeMessage"></h1>
         <button id="checkin">Сделать чек-ин</button>
         <div id="checkin-count" class="counter">0</div>
@@ -158,13 +176,16 @@
         const userId = user.id || "default_user";
 
         // Приветствие с именем пользователя
-        document.getElementById('welcomeMessage').innerText = `Привет, ${user.first_name}!`;
+        document.getElementById('userGreeting').innerText = `Привет, ${user.first_name}!`;
 
-        // Приветствие на экране, скрытие через 2 секунды
+        // Скрываем вкладку приветствия через 2 секунды и показываем главную вкладку
         setTimeout(() => {
-            document.getElementById('greeting').style.display = 'none';
+            document.getElementById('greetingContent').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
         }, 2000); // Задержка 2 секунды для приветствия
+
+        // Приветствие на главной вкладке
+        document.getElementById('welcomeMessage').innerText = `Привет, ${user.first_name}!`;
 
         // Счетчик чек-инов
         const counterElement = document.getElementById('checkin-count');
