@@ -15,7 +15,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             background-color: #1E1E1E;
             color: white;
         }
@@ -30,24 +30,21 @@
             font-size: 20px;
             cursor: pointer;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
         button:hover {
             background-color: #1C86EE;
         }
         .counter {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             width: 100px;
             height: 100px;
             line-height: 100px;
-            margin: 20px auto; /* Центрирование */
             border-radius: 50%;
             background-color: #1E90FF;
             color: white;
             font-size: 40px;
             font-weight: bold;
+            margin: 20px auto;
             opacity: 0;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
@@ -63,6 +60,14 @@
         .tab-content.active {
             display: block;
         }
+        #greeting {
+            display: block;
+            font-size: 24px;
+            color: #1E90FF;
+        }
+        #mainContent {
+            display: none;
+        }
         /* Нижнее меню */
         .bottom-menu {
             display: flex;
@@ -72,10 +77,8 @@
             padding: 10px 0;
             position: fixed;
             bottom: 0;
-            left: 0;
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-            box-sizing: border-box;
         }
         .menu-item {
             display: flex;
@@ -103,52 +106,41 @@
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
-        /* Приветствие */
-        #greeting {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 24px;
-            color: #1E90FF;
-            text-align: center;
-            display: none;
-        }
     </style>
 </head>
 <body>
     <!-- Приветствие -->
-    <h1 id="greeting">Добро пожаловать!</h1>
+    <h1 id="greeting">Загрузка...</h1>
 
     <!-- Основной контент -->
-    <div id="mainContent" style="display: none;">
-        <!-- Вкладка Главная -->
+    <div id="mainContent">
+        <!-- Главная -->
         <div id="homeContent" class="tab-content active">
             <h2>Главная</h2>
-            <p>Следите за своим прогрессом каждый день!</p>
+            <p>Добро пожаловать! Следите за своим прогрессом каждый день.</p>
             <button id="checkin">Сделать чек-ин</button>
             <div id="checkin-count" class="counter">0</div>
         </div>
-
-        <!-- Вкладка Рейтинг -->
+        
+        <!-- Рейтинг -->
         <div id="rankingContent" class="tab-content">
             <h2>Рейтинг</h2>
             <p>Здесь будет информация о вашем рейтинге.</p>
         </div>
-
-        <!-- Вкладка Награды -->
+        
+        <!-- Награды -->
         <div id="rewardsContent" class="tab-content">
             <h2>Награды</h2>
             <p>Здесь будут отображаться ваши награды.</p>
         </div>
-
-        <!-- Вкладка Друзья -->
+        
+        <!-- Друзья -->
         <div id="friendsContent" class="tab-content">
             <h2>Друзья</h2>
             <p>Здесь можно увидеть ваших друзей.</p>
         </div>
-
-        <!-- Вкладка Профиль -->
+        
+        <!-- Профиль -->
         <div id="profileContent" class="tab-content">
             <h2>Профиль</h2>
             <p>Здесь будет информация о вашем профиле.</p>
@@ -174,4 +166,73 @@
                 </div>
                 Награды
             </div>
-            <div
+            <div class="menu-item" onclick="showTab('friends')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/group.png" alt="Друзья">
+                </div>
+                Друзья
+            </div>
+            <div class="menu-item" onclick="showTab('profile')">
+                <div class="menu-icon">
+                    <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
+                </div>
+                Профиль
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const user = tg.initDataUnsafe?.user || { first_name: "Пользователь" };
+        const greetingElement = document.getElementById('greeting');
+        const mainContent = document.getElementById('mainContent');
+
+        // Показ приветствия на несколько секунд
+        greetingElement.innerText = `Привет, ${user.first_name}! Каждый день без сигарет — шаг к лучшему здоровью.`;
+        setTimeout(() => {
+            greetingElement.style.display = "none";
+            mainContent.style.display = "block";
+        }, 3000);
+
+        const counterElement = document.getElementById('checkin-count');
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || {};
+        const userId = user.id || "default_user";
+        const today = new Date().toISOString().split('T')[0];
+
+        if (!checkinData[userId]) {
+            checkinData[userId] = { count: 0, lastCheckin: null };
+        }
+        const userCheckin = checkinData[userId];
+
+        function updateCounter() {
+            counterElement.classList.remove('active');
+            setTimeout(() => {
+                counterElement.innerText = userCheckin.count;
+                counterElement.classList.add('active');
+            }, 200);
+        }
+        updateCounter();
+
+        document.getElementById('checkin').onclick = () => {
+            if (userCheckin.lastCheckin !== today) {
+                userCheckin.count++;
+                userCheckin.lastCheckin = today;
+                checkinData[userId] = userCheckin;
+                localStorage.setItem('checkinData', JSON.stringify(checkinData));
+                updateCounter();
+                alert("Чек-ин выполнен!");
+            } else {
+                alert("Вы уже сделали чек-ин сегодня.");
+            }
+        };
+
+        // Функция переключения вкладок
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`${tabName}Content`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
