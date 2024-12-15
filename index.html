@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quit Smoking App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Для графиков -->
     <style>
-        /* Базовые стили */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -15,10 +13,10 @@
             padding: 0;
             background-color: #1E1E1E;
             color: white;
-            overflow: hidden;
         }
-
-        /* Контейнер для вкладок */
+        h1 {
+            color: #1E90FF;
+        }
         .tab-content {
             display: none;
             text-align: center;
@@ -27,8 +25,6 @@
         .tab-content.active {
             display: block;
         }
-
-        h1 { color: #1E90FF; }
         button {
             background-color: #1E90FF;
             color: white;
@@ -38,20 +34,9 @@
             cursor: pointer;
             border-radius: 10px;
         }
-        button:hover { background-color: #1C86EE; }
-        .counter {
-            width: 120px;
-            height: 120px;
-            line-height: 120px;
-            margin: 30px auto;
-            border-radius: 50%;
-            background-color: #1E90FF;
-            color: white;
-            font-size: 45px;
-            font-weight: bold;
+        button:hover {
+            background-color: #1C86EE;
         }
-
-        /* Нижнее меню */
         .bottom-menu {
             display: flex;
             justify-content: space-around;
@@ -78,36 +63,36 @@
             justify-content: center;
             align-items: center;
         }
-        .menu-icon img { width: 24px; height: 24px; filter: brightness(0) invert(1); }
+        .menu-icon img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
     </style>
 </head>
 <body>
-    <!-- Приветственный экран -->
-    <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
-
     <!-- Вкладка Главная -->
     <div id="homeContent" class="tab-content active">
         <h1>Главная</h1>
         <button id="checkin">Сделать чек-ин</button>
-        <div id="checkin-count" class="counter">0</div>
     </div>
 
     <!-- Вкладка Рейтинг -->
     <div id="rankingContent" class="tab-content">
         <h1>Рейтинг</h1>
-        <p>Здесь будет информация о рейтинге пользователей.</p>
+        <p>Здесь будет информация о рейтинге.</p>
     </div>
 
     <!-- Вкладка Награды -->
     <div id="rewardsContent" class="tab-content">
         <h1>Награды</h1>
-        <p>Здесь будут ваши достижения.</p>
+        <p>Ваши достижения будут здесь.</p>
     </div>
 
     <!-- Вкладка Статистика -->
     <div id="statsContent" class="tab-content">
         <h1>Статистика</h1>
-        <canvas id="progressChart" width="300" height="300"></canvas>
+        <p>Здесь будет отображаться статистика.</p>
     </div>
 
     <!-- Вкладка Профиль -->
@@ -139,38 +124,11 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Логика для отображения вкладок
+        // Функция для переключения вкладок
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
-
-        // Чек-ин
-        const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
-
-        // Обновление счетчика
-        function updateCounter() {
-            counterElement.innerText = checkinData.count;
-        }
-
-        // Проверка чек-ина
-        const today = new Date().toISOString().split('T')[0]; // Текущая дата
-
-        document.getElementById('checkin').onclick = () => {
-            if (checkinData.lastCheckin !== today) {
-                checkinData.count++;
-                checkinData.lastCheckin = today;
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));
-                updateCounter();
-                alert("Чек-ин выполнен!");
-            } else {
-                alert("Вы уже сделали чек-ин сегодня.");
-            }
-        };
-
-        // Инициализация
-        updateCounter();
     </script>
 </body>
 </html>
