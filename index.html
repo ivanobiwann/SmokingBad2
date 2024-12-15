@@ -31,8 +31,8 @@
             color: #1E90FF;
         }
         #loading-img {
-            width: 100px;
-            height: 100px;
+            width: 150px;
+            height: 150px;
             animation: fadeIn 1.5s ease-in-out infinite alternate;
         }
         @keyframes fadeIn {
@@ -101,7 +101,7 @@
     <!-- Приветствие -->
     <div id="greeting-container">
         <h1 id="greeting">Загрузка...</h1>
-        <!-- Анимированная картинка (GIF или анимация) -->
+        <!-- Анимированная картинка (GIF с топчущей сигаретой) -->
         <img id="loading-img" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Загрузка...">
     </div>
 
@@ -159,7 +159,7 @@
         const greetingContainer = document.getElementById('greeting-container');
         const mainContent = document.getElementById('mainContent');
 
-        // Показ приветствия с анимированной картинкой
+        // Показ приветствия с именем пользователя
         greetingElement.innerText = `Привет, ${user.first_name}! Каждый день без сигарет — шаг к лучшему здоровью.`;
 
         setTimeout(() => {
