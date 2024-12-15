@@ -117,7 +117,17 @@
 
         // Чек-ин логика
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+
+        // Загружаем данные из localStorage или создаем их, если они отсутствуют
+        let checkinData = JSON.parse(localStorage.getItem('checkinData'));
+        if (!checkinData) {
+            checkinData = { count: 0, lastCheckin: null };
+            localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
+        }
+
+        // Проверка данных при загрузке
+        console.log("Загруженные данные:", checkinData);
+
         const today = new Date().toISOString().split('T')[0];
 
         // Обновление счетчика
@@ -130,14 +140,11 @@
             }
         }
 
-        // Проверка, если есть данные в localStorage
-        console.log("Загруженные данные из localStorage:", checkinData);
-
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
                 checkinData.count++;
                 checkinData.lastCheckin = today;
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));
+                localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем обновленные данные
                 updateCounter();
                 alert("Чек-ин выполнен!");
             } else {
