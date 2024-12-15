@@ -122,10 +122,17 @@
 
         // Обновление счетчика
         function updateCounter() {
-            console.log("Counter updated:", checkinData.count); // Логирование значения счетчика
-            counterElement.innerText = checkinData.count;
+            console.log("Текущий счетчик:", checkinData.count); // Логирование значения счетчика
+            if (checkinData.count !== undefined) {
+                counterElement.innerText = checkinData.count;
+            } else {
+                console.error("Ошибка: Счетчик не обновляется");
+            }
         }
-        
+
+        // Проверка, если есть данные в localStorage
+        console.log("Загруженные данные из localStorage:", checkinData);
+
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
                 checkinData.count++;
@@ -137,6 +144,8 @@
                 alert("Вы уже сделали чек-ин сегодня.");
             }
         };
+
+        // Вызов функции обновления счетчика при загрузке страницы
         updateCounter();
 
         // Функция для переключения вкладок
