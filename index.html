@@ -19,7 +19,6 @@
             background-color: #1E1E1E;
             color: white;
         }
-        /* Приветствие */
         #greeting-container {
             display: flex;
             flex-direction: column;
@@ -44,7 +43,6 @@
                 opacity: 1;
             }
         }
-        /* Основной контент */
         #mainContent {
             display: none;
         }
@@ -56,7 +54,6 @@
         .tab-content.active {
             display: block;
         }
-        /* Нижнее меню */
         .bottom-menu {
             display: flex;
             justify-content: space-around;
@@ -97,7 +94,6 @@
         .menu-item:hover .menu-icon {
             background-color: #1C86EE;
         }
-        /* Счетчик */
         .counter {
             width: 100px;
             height: 100px;
@@ -116,7 +112,6 @@
             opacity: 1;
             transform: scale(1);
         }
-        /* Стиль кнопки чек ин */
         #checkin {
             background-color: #1E90FF;
             color: white;
@@ -133,16 +128,12 @@
     </style>
 </head>
 <body>
-    <!-- Приветствие -->
     <div id="greeting-container">
         <h1 id="greeting">Загрузка...</h1>
-        <!-- Анимированная картинка (GIF с топчущей сигаретой) -->
         <img id="loading-img" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Загрузка...">
     </div>
 
-    <!-- Основной контент (начнется после загрузки) -->
     <div id="mainContent">
-        <!-- Главная -->
         <div id="homeContent" class="tab-content active">
             <h2>Главная</h2>
             <p>Добро пожаловать! Следите за своим прогрессом каждый день.</p>
@@ -151,7 +142,6 @@
         </div>
     </div>
 
-    <!-- Нижнее меню -->
     <nav class="bottom-menu">
         <div class="menu-item" onclick="showTab('home')">
             <div class="menu-icon">
@@ -194,9 +184,10 @@
         const greetingContainer = document.getElementById('greeting-container');
         const mainContent = document.getElementById('mainContent');
 
-        // Показ приветствия с именем пользователя
+        // Приветствие с именем пользователя
         greetingElement.innerText = `Привет, ${user.first_name}! Каждый день без сигарет — шаг к лучшему здоровью.`;
 
+        // Задержка для приветствия перед переходом на основной контент
         setTimeout(() => {
             greetingContainer.style.display = "none";
             mainContent.style.display = "block";
@@ -213,12 +204,10 @@
         const userCheckin = checkinData[userId];
 
         function updateCounter() {
-            // Обновляем значение счётчика на экране
             counterElement.innerText = userCheckin.count;
             counterElement.classList.add('active');
         }
 
-        // Первоначальная установка счетчика
         updateCounter();
 
         document.getElementById('checkin').onclick = () => {
@@ -234,7 +223,6 @@
             }
         };
 
-        // Функция переключения вкладок
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
