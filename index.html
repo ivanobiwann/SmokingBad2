@@ -143,26 +143,25 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Загружаем данные чек-инов из localStorage или создаем их
+        // Проверяем, есть ли данные о чек-инах в localStorage
         let checkinData = JSON.parse(localStorage.getItem('checkinData'));
         if (!checkinData) {
+            // Если данных нет, инициализируем их
             checkinData = { count: 0, lastCheckin: null };
-            localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
+            localStorage.setItem('checkinData', JSON.stringify(checkinData));
         }
 
         const checkinButton = document.getElementById('checkin');
         const checkinCounter = document.getElementById('checkin-count');
 
-        // Функция обновления счетчика
+        // Функция обновления счетчика чек-инов
         function updateCounter() {
-            // Загружаем актуальные данные из localStorage
-            checkinData = JSON.parse(localStorage.getItem('checkinData'));
             checkinCounter.innerText = checkinData.count; // Обновляем счетчик на медальке
         }
 
         // Обработка нажатия на кнопку чек-ин
         checkinButton.onclick = () => {
-            const today = new Date().toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0]; // Получаем текущую дату в формате YYYY-MM-DD
 
             // Проверяем, был ли уже чек-ин сегодня
             if (checkinData.lastCheckin !== today) {
