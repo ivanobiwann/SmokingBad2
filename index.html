@@ -145,6 +145,8 @@
 
         // Инициализация данных чек-инов
         let checkinData = JSON.parse(localStorage.getItem('checkinData'));
+
+        // Если данные еще не существуют в localStorage, создаем их
         if (!checkinData) {
             checkinData = { count: 0, lastCheckin: null };
             localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
@@ -155,25 +157,28 @@
 
         // Функция обновления счетчика
         function updateCounter() {
-            checkinCounter.innerText = checkinData.count;
+            // Загружаем актуальные данные из localStorage
+            checkinData = JSON.parse(localStorage.getItem('checkinData'));
+            checkinCounter.innerText = checkinData.count; // Обновляем счетчик на медальке
         }
 
         // Обработка нажатия на кнопку чек-ин
         checkinButton.onclick = () => {
             const today = new Date().toISOString().split('T')[0];
 
+            // Проверяем, был ли уже чек-ин сегодня
             if (checkinData.lastCheckin !== today) {
-                checkinData.count++;
-                checkinData.lastCheckin = today;
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));
-                updateCounter();
+                checkinData.count++; // Увеличиваем счетчик
+                checkinData.lastCheckin = today; // Обновляем дату последнего чек-ина
+                localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем данные в localStorage
+                updateCounter(); // Обновляем счетчик на экране
                 alert("Чек-ин выполнен!");
             } else {
                 alert("Вы уже сделали чек-ин сегодня.");
             }
         };
 
-        // Обновляем счетчик при загрузке
+        // Обновляем счетчик при загрузке страницы
         updateCounter();
 
         // Функция для переключения вкладок
