@@ -117,14 +117,10 @@
 
         // Чек-ин логика
         const counterElement = document.getElementById('checkin-count');
-
+        
         // Загружаем данные из localStorage или создаем их, если они отсутствуют
-        let checkinData = JSON.parse(localStorage.getItem('checkinData'));
-        if (!checkinData) {
-            checkinData = { count: 0, lastCheckin: null };
-            localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
-        }
-
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+        
         // Проверка данных при загрузке
         console.log("Загруженные данные:", checkinData);
 
@@ -133,11 +129,7 @@
         // Обновление счетчика
         function updateCounter() {
             console.log("Текущий счетчик:", checkinData.count); // Логирование значения счетчика
-            if (checkinData.count !== undefined) {
-                counterElement.innerText = checkinData.count;
-            } else {
-                console.error("Ошибка: Счетчик не обновляется");
-            }
+            counterElement.innerText = checkinData.count;
         }
 
         document.getElementById('checkin').onclick = () => {
