@@ -119,7 +119,11 @@
         const counterElement = document.getElementById('checkin-count');
         
         // Загружаем данные из localStorage или создаем их, если они отсутствуют
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+        let checkinData = JSON.parse(localStorage.getItem('checkinData'));
+        if (!checkinData) {
+            checkinData = { count: 0, lastCheckin: null };
+            localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
+        }
         
         // Проверка данных при загрузке
         console.log("Загруженные данные:", checkinData);
