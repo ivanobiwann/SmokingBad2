@@ -1,97 +1,88 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quit Smoking App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
-    <style>
-        /* Применение стилей для приветствия */
-        body {
-            overflow: hidden;
-            font-family: 'Ubuntu', sans-serif;
-            background-color: #1E1E1E;
-            color: white;
-            margin: 0;
-        }
-
-        div {
-            width: 100%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 4.3em;
-            letter-spacing: -4px;
-            font-weight: 700;
-            color: #7e2ea0;
-            text-align: center;
-        }
-
-        .cssanimation, .cssanimation span {
-            animation-duration: 1s;
-            animation-fill-mode: both;
-        }
-
-        .cssanimation span { 
-            display: inline-block; 
-        }
-
-        /* Эффект анимации для текста */
-        .leSnake span { 
-            animation: leSnake 1.5s ease-in-out; 
-            animation-iteration-count: infinite; 
-        }
-
-        @keyframes leSnake {
-            from, to { 
-                transform: translateY(0px); 
-            }
-            50% { 
-                transform: translateY(30px); 
-            }
-        }
-
-        .gif-container {
-            margin-top: 20px;
-        }
-
-        button {
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-
-        button:hover {
-            background-color: #1C86EE;
-        }
-    </style>
-</head>
-<body>
-    <!-- Вкладка приветствия -->
-    <div id="greetingContent">
-        <h1 class="cssanimation leSnake"><span>SmokingBad</span></h1>
-        <div class="gif-container">
-            <img src="https://media.giphy.com/media/3o7WImL0ZX4iz64G7u/giphy.gif" alt="Topchut sigaretu">
+<!-- Нижнее меню -->
+    <nav class="bottom-menu" id="bottomMenu">
+        <div class="menu-item" onclick="showTab('home')">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная">
+            </div>
+            Главная
         </div>
-    </div>
+        <div class="menu-item" onclick="showTab('ranking')">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг">
+            </div>
+            Рейтинг
+        </div>
+        <div class="menu-item" onclick="showTab('rewards')">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды">
+            </div>
+            Награды
+        </div>
+        <div class="menu-item" onclick="showTab('friends')">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/?size=100&id=0Zv7j2328VJP&format=png&color=000000" alt="Друзья">
+            </div>
+            Друзья
+        </div>
+        <div class="menu-item" onclick="showTab('profile')">
+            <div class="menu-icon">
+                <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
+            </div>
+            Профиль
+        </div>
+    </nav>
 
     <script>
-        // Скрытие приветствия и переход к следующему контенту
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const user = tg.initDataUnsafe?.user || { first_name: "Пользователь" };
+        document.getElementById('userGreeting').innerText = `Привет, ${user.first_name}!`;
+
+        // Скрываем вкладку приветствия через 2 секунды и показываем главную вкладку
         setTimeout(() => {
-            document.getElementById('greetingContent').style.display = 'none';
-            // Здесь можно добавить логику для перехода на основное приложение
-        }, 2000); // Приветствие будет показываться 2 секунды
+            document.getElementById('greetingContent').style.display = 'none'; // Скрываем приветствие
+            document.getElementById('homeContent').style.display = 'block';   // Показываем основное содержимое
+            document.getElementById('bottomMenu').style.display = 'flex';      // Показываем нижнее меню
+        }, 2000); // Задержка 2 секунды для приветствия
+
+        const counterElement = document.getElementById('checkin-count');
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || {};
+        const userId = user.id || "default_user";
+        const today = new Date().toISOString().split('T')[0];
+
+        if (!checkinData[userId]) {
+            checkinData[userId] = { count: 0, lastCheckin: null };
+        }
+        const userCheckin = checkinData[userId];
+
+        function updateCounter() {
+            counterElement.classList.remove('active');
+            setTimeout(() => {
+                counterElement.innerText = userCheckin.count;
+                counterElement.classList.add('active');
+            }, 200);
+        }
+        updateCounter();
+
+        document.getElementById('checkin').onclick = () => {
+            if (userCheckin.lastCheckin !== today) {
+                userCheckin.count++;
+                userCheckin.lastCheckin = today;
+                checkinData[userId] = userCheckin;
+                localStorage.setItem('checkinData', JSON.stringify(checkinData));
+                updateCounter();
+                alert("Чек-ин выполнен!");
+            } else {
+                alert("Вы уже сделали чек-ин сегодня.");
+            }
+        };
+
+        // Функция переключения вкладок
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`${tabName}Content`).classList.add('active');
+        }
     </script>
 </body>
 </html>
