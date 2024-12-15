@@ -35,10 +35,10 @@
         }
         button:hover { background-color: #1C86EE; }
         .counter {
-            width: 100px; height: 100px; line-height: 100px;
+            width: 120px; height: 120px; line-height: 120px;
             margin: 30px auto; border-radius: 50%;
             background-color: #1E90FF; color: white;
-            font-size: 40px; font-weight: bold;
+            font-size: 45px; font-weight: bold;
         }
         .bottom-menu {
             display: flex; justify-content: space-around;
@@ -120,9 +120,12 @@
         let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
         const today = new Date().toISOString().split('T')[0];
 
+        // Обновление счетчика
         function updateCounter() {
+            console.log("Counter updated:", checkinData.count); // Логирование значения счетчика
             counterElement.innerText = checkinData.count;
         }
+        
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
                 checkinData.count++;
