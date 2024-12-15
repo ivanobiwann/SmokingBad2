@@ -68,6 +68,22 @@
             height: 24px;
             filter: brightness(0) invert(1);
         }
+
+        /* Стили для медальки с чек-ином */
+        .medal {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            margin: 30px auto;
+            border-radius: 50%;
+            background-color: #FFD700;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -75,6 +91,9 @@
     <div id="homeContent" class="tab-content active">
         <h1>Главная</h1>
         <button id="checkin">Сделать чек-ин</button>
+
+        <!-- Медалька с счетчиком чек-инов -->
+        <div id="checkin-count" class="medal">0</div>
     </div>
 
     <!-- Вкладка Рейтинг -->
@@ -123,6 +142,39 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+
+        // Инициализация данных чек-инов
+        let checkinData = JSON.parse(localStorage.getItem('checkinData'));
+        if (!checkinData) {
+            checkinData = { count: 0, lastCheckin: null };
+            localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
+        }
+
+        const checkinButton = document.getElementById('checkin');
+        const checkinCounter = document.getElementById('checkin-count');
+
+        // Функция обновления счетчика
+        function updateCounter() {
+            checkinCounter.innerText = checkinData.count;
+        }
+
+        // Обработка нажатия на кнопку чек-ин
+        checkinButton.onclick = () => {
+            const today = new Date().toISOString().split('T')[0];
+
+            if (checkinData.lastCheckin !== today) {
+                checkinData.count++;
+                checkinData.lastCheckin = today;
+                localStorage.setItem('checkinData', JSON.stringify(checkinData));
+                updateCounter();
+                alert("Чек-ин выполнен!");
+            } else {
+                alert("Вы уже сделали чек-ин сегодня.");
+            }
+        };
+
+        // Обновляем счетчик при загрузке
+        updateCounter();
 
         // Функция для переключения вкладок
         function showTab(tabName) {
