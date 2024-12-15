@@ -13,9 +13,28 @@
             padding: 0;
             background-color: #1E1E1E;
             color: white;
+            overflow: hidden;
         }
-        h1 {
-            color: #1E90FF;
+        #greeting-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #1E90FF;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 1000;
+            animation: fadeOut 2s 3s forwards; /* Исчезает через 2 секунды после 3-секундной паузы */
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
         }
         .tab-content {
             display: none;
@@ -24,6 +43,9 @@
         }
         .tab-content.active {
             display: block;
+        }
+        h1 {
+            color: #1E90FF;
         }
         button {
             background-color: #1E90FF;
@@ -36,6 +58,17 @@
         }
         button:hover {
             background-color: #1C86EE;
+        }
+        .counter {
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            margin: 30px auto;
+            border-radius: 50%;
+            background-color: #1E90FF;
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
         }
         .bottom-menu {
             display: flex;
@@ -68,32 +101,17 @@
             height: 24px;
             filter: brightness(0) invert(1);
         }
-
-        /* Стили для медальки с чек-ином */
-        .medal {
-            width: 100px;
-            height: 100px;
-            line-height: 100px;
-            margin: 30px auto;
-            border-radius: 50%;
-            background-color: #FFD700;
-            color: white;
-            font-size: 30px;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
     </style>
 </head>
 <body>
+    <!-- Приветственный экран -->
+    <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
+
     <!-- Вкладка Главная -->
     <div id="homeContent" class="tab-content active">
         <h1>Главная</h1>
         <button id="checkin">Сделать чек-ин</button>
-
-        <!-- Медалька с счетчиком чек-инов -->
-        <div id="checkin-count" class="medal">0</div>
+        <div id="checkin-count" class="counter">0</div>
     </div>
 
     <!-- Вкладка Рейтинг -->
@@ -111,7 +129,7 @@
     <!-- Вкладка Статистика -->
     <div id="statsContent" class="tab-content">
         <h1>Статистика</h1>
-        <p>Здесь будет отображаться статистика.</p>
+        <canvas id="progressChart" width="300" height="300"></canvas>
     </div>
 
     <!-- Вкладка Профиль -->
@@ -140,42 +158,43 @@
     </nav>
 
     <script>
+        // Инициализация
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Проверяем, есть ли данные о чек-инах в localStorage
+        // Чек-ин логика
+        const counterElement = document.getElementById('checkin-count');
+
+        // Загружаем данные из localStorage или создаем их, если они отсутствуют
         let checkinData = JSON.parse(localStorage.getItem('checkinData'));
         if (!checkinData) {
-            // Если данных нет, инициализируем их
             checkinData = { count: 0, lastCheckin: null };
-            localStorage.setItem('checkinData', JSON.stringify(checkinData));
+            localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем начальные данные
         }
 
-        const checkinButton = document.getElementById('checkin');
-        const checkinCounter = document.getElementById('checkin-count');
+        // Проверка данных при загрузке
+        console.log("Загруженные данные:", checkinData);
 
-        // Функция обновления счетчика чек-инов
+        const today = new Date().toISOString().split('T')[0];
+
+        // Обновление счетчика
         function updateCounter() {
-            checkinCounter.innerText = checkinData.count; // Обновляем счетчик на медальке
+            counterElement.innerText = checkinData.count || 0;
         }
 
-        // Обработка нажатия на кнопку чек-ин
-        checkinButton.onclick = () => {
-            const today = new Date().toISOString().split('T')[0]; // Получаем текущую дату в формате YYYY-MM-DD
-
-            // Проверяем, был ли уже чек-ин сегодня
+        document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
-                checkinData.count++; // Увеличиваем счетчик
-                checkinData.lastCheckin = today; // Обновляем дату последнего чек-ина
-                localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем данные в localStorage
-                updateCounter(); // Обновляем счетчик на экране
+                checkinData.count++;
+                checkinData.lastCheckin = today;
+                localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем обновленные данные
+                updateCounter();
                 alert("Чек-ин выполнен!");
             } else {
                 alert("Вы уже сделали чек-ин сегодня.");
             }
         };
 
-        // Обновляем счетчик при загрузке страницы
+        // Вызов функции обновления счетчика при загрузке страницы
         updateCounter();
 
         // Функция для переключения вкладок
