@@ -10,83 +10,49 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: #1E1E1E;
-            color: white;
-            overflow: hidden;
+            color: white; overflow: hidden;
         }
         #greeting-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background-color: #1E90FF;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            z-index: 1000;
-            animation: fadeOut 2s 3s forwards;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: #1E90FF; color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; z-index: 1000;
+            animation: fadeOut 2s 3s forwards; /* Исчезает через 2 секунды после 3-секундной паузы */
         }
         @keyframes fadeOut {
             to { opacity: 0; visibility: hidden; }
         }
         .tab-content {
-            display: none;
-            text-align: center;
-            margin-top: 50px;
+            display: none; text-align: center; margin-top: 50px;
         }
         .tab-content.active { display: block; }
         h1 { color: #1E90FF; }
         button {
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 10px;
+            background-color: #1E90FF; color: white; border: none;
+            padding: 15px 30px; font-size: 20px; cursor: pointer; border-radius: 10px;
         }
         button:hover { background-color: #1C86EE; }
         .counter {
-            width: 120px;
-            height: 120px;
-            line-height: 120px;
-            margin: 30px auto;
-            border-radius: 50%;
-            background-color: #1E90FF;
-            color: white;
-            font-size: 45px;
-            font-weight: bold;
+            width: 120px; height: 120px; line-height: 120px;
+            margin: 30px auto; border-radius: 50%;
+            background-color: #1E90FF; color: white;
+            font-size: 45px; font-weight: bold;
         }
         .bottom-menu {
-            display: flex;
-            justify-content: space-around;
-            background-color: #2E2E2E;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            padding: 10px 0;
+            display: flex; justify-content: space-around;
+            background-color: #2E2E2E; position: fixed;
+            bottom: 0; width: 100%; padding: 10px 0;
         }
         .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: white;
-            font-size: 12px;
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: white; font-size: 12px;
         }
         .menu-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #1E90FF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: #1E90FF; display: flex;
+            justify-content: center; align-items: center;
         }
         .menu-icon img { width: 24px; height: 24px; filter: brightness(0) invert(1); }
     </style>
@@ -102,32 +68,76 @@
         <div id="checkin-count" class="counter">0</div>
     </div>
 
+    <!-- Вкладка Рейтинг -->
+    <div id="rankingContent" class="tab-content">
+        <h1>Рейтинг</h1>
+        <p>Здесь будет информация о рейтинге.</p>
+    </div>
+
+    <!-- Вкладка Награды -->
+    <div id="rewardsContent" class="tab-content">
+        <h1>Награды</h1>
+        <p>Ваши достижения будут здесь.</p>
+    </div>
+
+    <!-- Вкладка Статистика -->
+    <div id="statsContent" class="tab-content">
+        <h1>Статистика</h1>
+        <canvas id="progressChart" width="300" height="300"></canvas>
+    </div>
+
+    <!-- Вкладка Профиль -->
+    <div id="profileContent" class="tab-content">
+        <h1>Профиль</h1>
+        <p>Информация о вашем профиле.</p>
+    </div>
+
     <!-- Нижнее меню -->
     <nav class="bottom-menu">
         <div class="menu-item" onclick="showTab('home')">
             <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная"></div> Главная
         </div>
+        <div class="menu-item" onclick="showTab('ranking')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг"></div> Рейтинг
+        </div>
+        <div class="menu-item" onclick="showTab('rewards')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды"></div> Награды
+        </div>
+        <div class="menu-item" onclick="showTab('stats')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" alt="Статистика"></div> Статистика
+        </div>
+        <div class="menu-item" onclick="showTab('profile')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль"></div> Профиль
+        </div>
     </nav>
 
     <script>
-        // Инициализация данных для чек-инов
-        const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+        const tg = window.Telegram.WebApp;
+        tg.expand();
 
-        // Функция для обновления счетчика на странице
+        // Чек-ин логика
+        const counterElement = document.getElementById('checkin-count');
+        
+        // Загружаем данные из localStorage или создаем их, если они отсутствуют
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+        
+        // Проверка данных при загрузке
+        console.log("Загруженные данные:", checkinData);
+
+        const today = new Date().toISOString().split('T')[0];
+
+        // Обновление счетчика
         function updateCounter() {
+            console.log("Текущий счетчик:", checkinData.count); // Логирование значения счетчика
             counterElement.innerText = checkinData.count;
         }
 
-        // Проверка чек-ина
-        const today = new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
-
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
-                checkinData.count++;  // Увеличиваем счетчик
-                checkinData.lastCheckin = today;  // Сохраняем дату последнего чек-ина
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));  // Сохраняем данные в localStorage
-                updateCounter();  // Обновляем отображение счетчика
+                checkinData.count++;
+                checkinData.lastCheckin = today;
+                localStorage.setItem('checkinData', JSON.stringify(checkinData)); // Сохраняем обновленные данные
+                updateCounter();
                 alert("Чек-ин выполнен!");
             } else {
                 alert("Вы уже сделали чек-ин сегодня.");
