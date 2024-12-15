@@ -1,34 +1,113 @@
-<!-- Нижнее меню -->
-    <nav class="bottom-menu" id="bottomMenu">
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quit Smoking App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0; padding: 0;
+            background-color: #1E1E1E;
+            color: white; overflow: hidden;
+        }
+        #greeting-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: #1E90FF; color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; z-index: 1000;
+            animation: fadeOut 2s 3s forwards; /* Исчезает через 2 секунды после 3-секундной паузы */
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+        .tab-content {
+            display: none; text-align: center; margin-top: 50px;
+        }
+        .tab-content.active { display: block; }
+        h1 { color: #1E90FF; }
+        button {
+            background-color: #1E90FF; color: white; border: none;
+            padding: 15px 30px; font-size: 20px; cursor: pointer; border-radius: 10px;
+        }
+        button:hover { background-color: #1C86EE; }
+        .counter {
+            width: 100px; height: 100px; line-height: 100px;
+            margin: 30px auto; border-radius: 50%;
+            background-color: #1E90FF; color: white;
+            font-size: 40px; font-weight: bold;
+        }
+        .bottom-menu {
+            display: flex; justify-content: space-around;
+            background-color: #2E2E2E; position: fixed;
+            bottom: 0; width: 100%; padding: 10px 0;
+        }
+        .menu-item {
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: white; font-size: 12px;
+        }
+        .menu-icon {
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: #1E90FF; display: flex;
+            justify-content: center; align-items: center;
+        }
+        .menu-icon img { width: 24px; height: 24px; filter: brightness(0) invert(1); }
+    </style>
+</head>
+<body>
+    <!-- Приветственный экран -->
+    <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
+
+    <!-- Вкладка Главная -->
+    <div id="homeContent" class="tab-content active">
+        <h1>Главная</h1>
+        <button id="checkin">Сделать чек-ин</button>
+        <div id="checkin-count" class="counter">0</div>
+    </div>
+
+    <!-- Вкладка Рейтинг -->
+    <div id="rankingContent" class="tab-content">
+        <h1>Рейтинг</h1>
+        <p>Здесь будет информация о рейтинге.</p>
+    </div>
+
+    <!-- Вкладка Награды -->
+    <div id="rewardsContent" class="tab-content">
+        <h1>Награды</h1>
+        <p>Ваши достижения будут здесь.</p>
+    </div>
+
+    <!-- Вкладка Статистика -->
+    <div id="statsContent" class="tab-content">
+        <h1>Статистика</h1>
+        <canvas id="progressChart" width="300" height="300"></canvas>
+    </div>
+
+    <!-- Вкладка Профиль -->
+    <div id="profileContent" class="tab-content">
+        <h1>Профиль</h1>
+        <p>Информация о вашем профиле.</p>
+    </div>
+
+    <!-- Нижнее меню -->
+    <nav class="bottom-menu">
         <div class="menu-item" onclick="showTab('home')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная">
-            </div>
-            Главная
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная"></div> Главная
         </div>
         <div class="menu-item" onclick="showTab('ranking')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг">
-            </div>
-            Рейтинг
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг"></div> Рейтинг
         </div>
         <div class="menu-item" onclick="showTab('rewards')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды">
-            </div>
-            Награды
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды"></div> Награды
         </div>
-        <div class="menu-item" onclick="showTab('friends')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/?size=100&id=0Zv7j2328VJP&format=png&color=000000" alt="Друзья">
-            </div>
-            Друзья
+        <div class="menu-item" onclick="showTab('stats')">
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" alt="Статистика"></div> Статистика
         </div>
         <div class="menu-item" onclick="showTab('profile')">
-            <div class="menu-icon">
-                <img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль">
-            </div>
-            Профиль
+            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль"></div> Профиль
         </div>
     </nav>
 
@@ -36,40 +115,18 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const user = tg.initDataUnsafe?.user || { first_name: "Пользователь" };
-        document.getElementById('userGreeting').innerText = `Привет, ${user.first_name}!`;
-
-        // Скрываем вкладку приветствия через 2 секунды и показываем главную вкладку
-        setTimeout(() => {
-            document.getElementById('greetingContent').style.display = 'none'; // Скрываем приветствие
-            document.getElementById('homeContent').style.display = 'block';   // Показываем основное содержимое
-            document.getElementById('bottomMenu').style.display = 'flex';      // Показываем нижнее меню
-        }, 2000); // Задержка 2 секунды для приветствия
-
+        // Чек-ин логика
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || {};
-        const userId = user.id || "default_user";
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
         const today = new Date().toISOString().split('T')[0];
 
-        if (!checkinData[userId]) {
-            checkinData[userId] = { count: 0, lastCheckin: null };
-        }
-        const userCheckin = checkinData[userId];
-
         function updateCounter() {
-            counterElement.classList.remove('active');
-            setTimeout(() => {
-                counterElement.innerText = userCheckin.count;
-                counterElement.classList.add('active');
-            }, 200);
+            counterElement.innerText = checkinData.count;
         }
-        updateCounter();
-
         document.getElementById('checkin').onclick = () => {
-            if (userCheckin.lastCheckin !== today) {
-                userCheckin.count++;
-                userCheckin.lastCheckin = today;
-                checkinData[userId] = userCheckin;
+            if (checkinData.lastCheckin !== today) {
+                checkinData.count++;
+                checkinData.lastCheckin = today;
                 localStorage.setItem('checkinData', JSON.stringify(checkinData));
                 updateCounter();
                 alert("Чек-ин выполнен!");
@@ -77,10 +134,11 @@
                 alert("Вы уже сделали чек-ин сегодня.");
             }
         };
+        updateCounter();
 
-        // Функция переключения вкладок
+        // Функция для переключения вкладок
         function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
     </script>
