@@ -31,7 +31,7 @@
             align-items: center;
             font-size: 24px;
             z-index: 1000;
-            animation: fadeOut 1s 2s forwards;
+            animation: fadeOut 2s 3s forwards;
         }
 
         @keyframes fadeOut {
@@ -40,11 +40,6 @@
                 visibility: hidden;
             }
         }
-
-        /* Скрываем основной контент по умолчанию */
-        #main-content {
-            display: none;
-        }    
 
         /* Вкладки */
         .tab-content {
@@ -124,8 +119,6 @@
     <!-- Приветственный экран -->
     <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
 
-<!-- Основной контент -->
-<div id="main-content" style="display: none;">    
     <!-- Вкладка Главная -->
     <div id="homeContent" class="tab-content active">
         <h1>Главная</h1>
@@ -206,17 +199,6 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-    const greetingScreen = document.getElementById('greeting-screen');
-    const mainContent = document.getElementById('main-content');
-
-    // Ждем завершения анимации экрана загрузки
-    greetingScreen.addEventListener('animationend', () => {
-        greetingScreen.style.display = 'none'; // Полностью убираем экран загрузки
-        mainContent.style.display = 'block';   // Показываем основной контент
-    });
-});
     </script>
 </body>
 </html>
