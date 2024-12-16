@@ -206,6 +206,17 @@
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const greetingScreen = document.getElementById('greeting-screen');
+    const mainContent = document.getElementById('main-content');
+
+    // Ждем завершения анимации экрана загрузки
+    greetingScreen.addEventListener('animationend', () => {
+        greetingScreen.style.display = 'none'; // Полностью убираем экран загрузки
+        mainContent.style.display = 'block';   // Показываем основной контент
+    });
+});
     </script>
 </body>
 </html>
