@@ -29,16 +29,46 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             font-size: 24px;
             z-index: 1000;
             animation: fadeOut 1s 2s forwards;
         }
 
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
+        /* Стили для индикатора загрузки */
+        .loading-bar {
+            width: 70%;                /* Ширина бара */
+            height: 10px;              /* Высота бара */
+            background-color: white;   /* Цвет бара */
+            margin-bottom: 20px;       /* Отступ между баром и текстом */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: #1E90FF; /* Цвет заполнителя бара */
+            animation: load 3s linear infinite; /* Анимация для заполнения бара */
+         }
+
+         /* Анимация для прогресса загрузки */
+         @keyframes load {
+             to {
+                 left: 100%;
+             }
+         }
+
+         /* Анимация исчезновения экрана загрузки */
+         @keyframes fadeOut {
+             to {
+                 opacity: 0;
+                 visibility: hidden;
+             }
         }
 
         /* Вкладки */
@@ -126,7 +156,10 @@
 </head>
 <body>
     <!-- Приветственный экран -->
-    <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
+    <div id="greeting-screen">
+        <div class="loading-bar"></div>
+        Добро пожаловать, загружаем приложение
+    </div>
 
     <!-- Основной контент -->
     <div id="main-content" style="display: none;">
