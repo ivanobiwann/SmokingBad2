@@ -15,6 +15,8 @@
             color: white;
             overflow: hidden;
         }
+
+        /* Приветственный экран */
         #greeting-screen {
             position: fixed;
             top: 0;
@@ -26,27 +28,66 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            text-align: center;
+            font-size: 20px;
             z-index: 1000;
             animation: fadeOut 2s 3s forwards; /* Исчезает через 2 секунды после 3-секундной паузы */
         }
+
+        .greeting-content h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .greeting-content p {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 10px;
+            margin: 20px auto;
+            background-color: #87CEFA;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0;
+            height: 100%;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            animation: progressFill 3s linear forwards;
+        }
+
+        @keyframes progressFill {
+            to {
+                width: 100%;
+            }
+        }
+
         @keyframes fadeOut {
             to {
                 opacity: 0;
                 visibility: hidden;
             }
         }
+
         .tab-content {
             display: none;
             text-align: center;
             margin-top: 50px;
         }
+
         .tab-content.active {
             display: block;
         }
+
         h1 {
             color: #1E90FF;
         }
+
         button {
             background-color: #1E90FF;
             color: white;
@@ -56,9 +97,11 @@
             cursor: pointer;
             border-radius: 10px;
         }
+
         button:hover {
             background-color: #1C86EE;
         }
+
         .counter {
             width: 120px;
             height: 120px;
@@ -70,6 +113,7 @@
             font-size: 45px;
             font-weight: bold;
         }
+
         .bottom-menu {
             display: flex;
             justify-content: space-around;
@@ -79,6 +123,7 @@
             width: 100%;
             padding: 10px 0;
         }
+
         .menu-item {
             display: flex;
             flex-direction: column;
@@ -87,6 +132,7 @@
             color: white;
             font-size: 12px;
         }
+
         .menu-icon {
             width: 50px;
             height: 50px;
@@ -96,6 +142,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .menu-icon img {
             width: 24px;
             height: 24px;
@@ -105,7 +152,15 @@
 </head>
 <body>
     <!-- Приветственный экран -->
-    <div id="greeting-screen">Добро пожаловать, загружаем приложение...</div>
+    <div id="greeting-screen">
+        <div class="greeting-content">
+            <h1>Добро пожаловать!</h1>
+            <p id="greeting-message">Загружаем ваше приложение...</p>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Вкладка Главная -->
     <div id="homeContent" class="tab-content active">
@@ -158,14 +213,31 @@
     </nav>
 
     <script>
-        // Инициализация
+        // Telegram WebApp API
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Динамическое приветствие
+        const greetingMessages = [
+            "Подготавливаем ваш опыт...",
+            "Загружаем функции приложения...",
+            "Почти готово! Приятного использования!"
+        ];
+
+        let index = 0;
+        const greetingMessageElement = document.getElementById('greeting-message');
+
+        const messageInterval = setInterval(() => {
+            index++;
+            if (index < greetingMessages.length) {
+                greetingMessageElement.textContent = greetingMessages[index];
+            } else {
+                clearInterval(messageInterval);
+            }
+        }, 1000);
+
         // Чек-ин логика
         const counterElement = document.getElementById('checkin-count');
-
-        // Загружаем данные из localStorage или создаем их, если они отсутствуют
         let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
 
         const today = new Date().toISOString().split('T')[0];
@@ -190,4 +262,8 @@
 
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(`${tabName
+            document.getElementById(`${tabName}Content`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
