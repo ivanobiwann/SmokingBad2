@@ -9,170 +9,90 @@
         /* Основные стили */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #1E1E1E;
+            background-color: #0088cc; /* Цвет Telegram */
             color: white;
-            overflow: hidden;
-        }
-
-        /* Вкладки */
-        .tab-content {
-            display: none;
-            text-align: center;
-            margin-top: 50px;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        h1 {
-            color: #1E90FF;
-        }
-
-        button {
-            background-color: #1E90FF;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-        button:hover {
-            background-color: #1C86EE;
-        }
-
-        .counter {
-            width: 120px;
-            height: 120px;
-            line-height: 120px;
-            margin: 30px auto;
-            border-radius: 50%;
-            background-color: #1E90FF;
-            color: white;
-            font-size: 45px;
-            font-weight: bold;
-        }
-
-        /* Нижнее меню */
-        .bottom-menu {
-            display: flex;
-            justify-content: space-around;
-            background-color: #2E2E2E;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            padding: 10px 0;
-        }
-        .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: white;
-            font-size: 12px;
-        }
-        .menu-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #1E90FF;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            flex-direction: column;
         }
-        .menu-icon img {
-            width: 24px;
-            height: 24px;
-            filter: brightness(0) invert(1);
+
+        /* Приветственное сообщение */
+        #greeting-message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Бар загрузки */
+        #loading-bar {
+            width: 80%;
+            background-color: #ffffff;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        #loading-progress {
+            height: 100%;
+            width: 0;
+            background-color: #0088cc;
+            border-radius: 5px;
+            animation: loading 5s linear infinite;
+        }
+
+        @keyframes loading {
+            0% { width: 0; }
+            50% { width: 50%; }
+            100% { width: 100%; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Вкладка Главная -->
-    <div id="homeContent" class="tab-content active">
-        <h1>Главная</h1>
-        <button id="checkin">Сделать чек-ин</button>
-        <div id="checkin-count" class="counter">0</div>
+    <!-- Приветственное сообщение -->
+    <div id="greeting-message">Добро пожаловать в приложение!</div>
+    
+    <!-- Бар загрузки -->
+    <div id="loading-bar">
+        <div id="loading-progress"></div>
     </div>
-
-    <!-- Вкладка Рейтинг -->
-    <div id="rankingContent" class="tab-content">
-        <h1>Рейтинг</h1>
-        <p>Здесь будет информация о рейтинге.</p>
-    </div>
-
-    <!-- Вкладка Награды -->
-    <div id="rewardsContent" class="tab-content">
-        <h1>Награды</h1>
-        <p>Ваши достижения будут здесь.</p>
-    </div>
-
-    <!-- Вкладка Статистика -->
-    <div id="statsContent" class="tab-content">
-        <h1>Статистика</h1>
-        <canvas id="progressChart" width="300" height="300"></canvas>
-    </div>
-
-    <!-- Вкладка Профиль -->
-    <div id="profileContent" class="tab-content">
-        <h1>Профиль</h1>
-        <p>Информация о вашем профиле.</p>
-    </div>
-
-    <!-- Нижнее меню -->
-    <nav class="bottom-menu">
-        <div class="menu-item" onclick="showTab('home')">
-            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная"></div> Главная
-        </div>
-        <div class="menu-item" onclick="showTab('ranking')">
-            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг"></div> Рейтинг
-        </div>
-        <div class="menu-item" onclick="showTab('rewards')">
-            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды"></div> Награды
-        </div>
-        <div class="menu-item" onclick="showTab('stats')">
-            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" alt="Статистика"></div> Статистика
-        </div>
-        <div class="menu-item" onclick="showTab('profile')">
-            <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль"></div> Профиль
-        </div>
-    </nav>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
-        const today = new Date().toISOString().split('T')[0];
-
-        function updateCounter() {
-            counterElement.innerText = checkinData.count || 0;
+        // Динамическое приветствие в зависимости от времени суток
+        const greetingMessage = document.getElementById("greeting-message");
+        const hours = new Date().getHours();
+        
+        if (hours < 12) {
+            greetingMessage.textContent = "Доброе утро! Подготавливаем приложение...";
+        } else if (hours < 18) {
+            greetingMessage.textContent = "Добрый день! Подготавливаем приложение...";
+        } else {
+            greetingMessage.textContent = "Добрый вечер! Подготавливаем приложение...";
         }
 
-        document.getElementById('checkin').onclick = () => {
-            if (checkinData.lastCheckin !== today) {
-                checkinData.count++;
-                checkinData.lastCheckin = today;
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));
-                updateCounter();
-                alert("Чек-ин выполнен!");
-            } else {
-                alert("Вы уже сделали чек-ин сегодня.");
+        // Функция для симуляции загрузки
+        let progress = 0;
+        const loadingProgress = document.getElementById("loading-progress");
+
+        function updateLoadingBar() {
+            progress += 1;
+            loadingProgress.style.width = progress + "%";
+            if (progress >= 100) {
+                // Когда загрузка завершена, скрываем страницу загрузки
+                setTimeout(() => {
+                    document.body.innerHTML = ''; // Очистка страницы
+                    // Здесь вы можете перенаправить пользователя на главную страницу приложения
+                    window.location.href = 'index.html'; // Пример перехода на основную страницу
+                }, 300); // Задержка перед редиректом
             }
-        };
-
-        updateCounter();
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(`${tabName}Content`).classList.add('active');
         }
+
+        setInterval(updateLoadingBar, 50); // Обновляем бар каждую 50 миллисекунд
+
     </script>
 </body>
 </html>
