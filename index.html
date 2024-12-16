@@ -9,98 +9,114 @@
         /* Основные стили */
         body {
             font-family: Arial, sans-serif;
+            text-align: center;
             margin: 0;
             padding: 0;
-            background-color: #0088cc; /* Цвет Telegram */
+            background-color: #1E1E1E;
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             overflow: hidden;
         }
 
-        /* Контейнер для приветственного экрана */
-        #loading-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background-color: #0088cc; /* Цвет Telegram */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+        /* Вкладки */
+        .tab-content {
+            display: none;
             text-align: center;
-            box-sizing: border-box;
-            padding: 0 20px; /* Поля, чтобы текст не выходил за границы */
+            margin-top: 50px;
+        }
+        .tab-content.active {
+            display: block;
         }
 
-        /* Приветственное сообщение */
-        #greeting-message {
+        h1 {
+            color: #1E90FF;
+        }
+
+        button {
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
             font-size: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #1C86EE;
+        }
+
+        .counter {
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            margin: 30px auto;
+            border-radius: 50%;
+            background-color: #1E90FF;
+            color: white;
+            font-size: 45px;
             font-weight: bold;
-            margin-bottom: 20px;
         }
 
-        /* Бар загрузки */
-        #loading-bar {
-            width: 80%;
-            background-color: #ffffff; /* Контрастный цвет для фона */
-            height: 10px;
-            border-radius: 5px;
-            overflow: hidden;
+        /* Нижнее меню */
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            background-color: #2E2E2E;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 0;
         }
-
-        #loading-progress {
-            height: 100%;
-            width: 0;
-            background-color: #006699; /* Темно-синий для прогресса */
-            transition: width 0.3s ease; /* Плавное заполнение */
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            font-size: 12px;
+        }
+        .menu-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #1E90FF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .menu-icon img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
         }
     </style>
 </head>
 <body>
-    <!-- Приветственный экран -->
-    <div id="loading-screen">
-        <div id="greeting-message">Добро пожаловать! Подготавливаем приложение...</div>
-        <div id="loading-bar">
-            <div id="loading-progress"></div>
-        </div>
+    <!-- Вкладка Главная -->
+    <div id="homeContent" class="tab-content active">
+        <h1>Главная</h1>
+        <button id="checkin">Сделать чек-ин</button>
+        <div id="checkin-count" class="counter">0</div>
     </div>
 
-    <script>
-        // Динамическое приветствие по времени суток
-        const greetingMessage = document.getElementById("greeting-message");
-        const hours = new Date().getHours();
+    <!-- Вкладка Рейтинг -->
+    <div id="rankingContent" class="tab-content">
+        <h1>Рейтинг</h1>
+        <p>Здесь будет информация о рейтинге.</p>
+    </div>
 
-        if (hours < 12) {
-            greetingMessage.textContent = "Доброе утро! Подготавливаем приложение...";
-        } else if (hours < 18) {
-            greetingMessage.textContent = "Добрый день! Подготавливаем приложение...";
-        } else {
-            greetingMessage.textContent = "Добрый вечер! Подготавливаем приложение...";
-        }
+    <!-- Вкладка Награды -->
+    <div id="rewardsContent" class="tab-content">
+        <h1>Награды</h1>
+        <p>Ваши достижения будут здесь.</p>
+    </div>
 
-        // Логика для прогресс-бара
-        let progress = 0;
-        const loadingProgress = document.getElementById("loading-progress");
+    <!-- Вкладка Статистика -->
+    <div id="statsContent" class="tab-content">
+        <h1>Статистика</h1>
+        <canvas id="progressChart" width="300" height="300"></canvas>
+    </div>
 
-        function updateLoadingBar() {
-            progress += 1;
-            loadingProgress.style.width = progress + "%";
-
-            if (progress >= 100) {
-                clearInterval(loadingInterval);
-
-                // Удаляем экран загрузки
-                document.getElementById("loading-screen").style.display = "none";
-            }
-        }
-
-        // Обновляем прогресс каждую 30 мс
-        const loadingInterval = setInterval(updateLoadingBar, 30);
-    </script>
-</body>
-</html>
+    <!-- Вкладка Профиль -->
+    <div id="profileContent" class="tab-content">
+        <
