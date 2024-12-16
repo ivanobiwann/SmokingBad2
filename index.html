@@ -17,12 +17,29 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Контейнер для приветственного экрана */
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #0088cc; /* Цвет Telegram */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             flex-direction: column;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 0 20px; /* Поля, чтобы текст не выходил за границы */
         }
 
         /* Приветственное сообщение */
         #greeting-message {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 20px;
         }
@@ -30,42 +47,34 @@
         /* Бар загрузки */
         #loading-bar {
             width: 80%;
-            background-color: #ffffff;
+            background-color: #ffffff; /* Контрастный цвет для фона */
             height: 10px;
             border-radius: 5px;
             overflow: hidden;
-            margin-top: 20px;
         }
 
         #loading-progress {
             height: 100%;
             width: 0;
-            background-color: #0088cc;
-            border-radius: 5px;
-            animation: loading 5s linear infinite;
-        }
-
-        @keyframes loading {
-            0% { width: 0; }
-            50% { width: 50%; }
-            100% { width: 100%; }
+            background-color: #006699; /* Темно-синий для прогресса */
+            transition: width 0.3s ease; /* Плавное заполнение */
         }
     </style>
 </head>
 <body>
-    <!-- Приветственное сообщение -->
-    <div id="greeting-message">Добро пожаловать в приложение!</div>
-    
-    <!-- Бар загрузки -->
-    <div id="loading-bar">
-        <div id="loading-progress"></div>
+    <!-- Приветственный экран -->
+    <div id="loading-screen">
+        <div id="greeting-message">Добро пожаловать! Подготавливаем приложение...</div>
+        <div id="loading-bar">
+            <div id="loading-progress"></div>
+        </div>
     </div>
 
     <script>
-        // Динамическое приветствие в зависимости от времени суток
+        // Динамическое приветствие по времени суток
         const greetingMessage = document.getElementById("greeting-message");
         const hours = new Date().getHours();
-        
+
         if (hours < 12) {
             greetingMessage.textContent = "Доброе утро! Подготавливаем приложение...";
         } else if (hours < 18) {
@@ -74,25 +83,24 @@
             greetingMessage.textContent = "Добрый вечер! Подготавливаем приложение...";
         }
 
-        // Функция для симуляции загрузки
+        // Логика для прогресс-бара
         let progress = 0;
         const loadingProgress = document.getElementById("loading-progress");
 
         function updateLoadingBar() {
             progress += 1;
             loadingProgress.style.width = progress + "%";
+
             if (progress >= 100) {
-                // Когда загрузка завершена, скрываем страницу загрузки
-                setTimeout(() => {
-                    document.body.innerHTML = ''; // Очистка страницы
-                    // Здесь вы можете перенаправить пользователя на главную страницу приложения
-                    window.location.href = 'index.html'; // Пример перехода на основную страницу
-                }, 300); // Задержка перед редиректом
+                clearInterval(loadingInterval);
+
+                // Удаляем экран загрузки
+                document.getElementById("loading-screen").style.display = "none";
             }
         }
 
-        setInterval(updateLoadingBar, 50); // Обновляем бар каждую 50 миллисекунд
-
+        // Обновляем прогресс каждую 30 мс
+        const loadingInterval = setInterval(updateLoadingBar, 30);
     </script>
 </body>
 </html>
