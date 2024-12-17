@@ -245,17 +245,8 @@
         tg.expand();
 
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null, streak: 0 };
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
         const today = new Date().toISOString().split('T')[0];
-
-        const rewards = {
-            reward1: false,
-            reward2: false,
-            reward3: false,
-            reward4: false,
-            reward5: false,
-            reward6: false
-        };
 
         function updateCounter() {
             counterElement.innerText = checkinData.count || 0;
@@ -263,29 +254,30 @@
         }
 
         function checkRewards() {
+            console.log('Проверка наград...');
+            // Проверка для первой награды
             if (checkinData.count >= 1) {
                 document.getElementById('reward1').classList.add('completed');
-                rewards.reward1 = true;
             }
+            // Проверка для второй награды
             if (checkinData.count >= 7) {
                 document.getElementById('reward2').classList.add('completed');
-                rewards.reward2 = true;
             }
+            // Проверка для третьей награды
             if (checkinData.count >= 30) {
                 document.getElementById('reward3').classList.add('completed');
-                rewards.reward3 = true;
             }
+            // Проверка для четвертой награды
             if (checkinData.count >= 100) {
                 document.getElementById('reward4').classList.add('completed');
-                rewards.reward4 = true;
             }
+            // Проверка для пятой награды
             if (checkinData.count >= 14) {
                 document.getElementById('reward5').classList.add('completed');
-                rewards.reward5 = true;
             }
+            // Проверка для шестой награды
             if (checkinData.count >= 21) {
                 document.getElementById('reward6').classList.add('completed');
-                rewards.reward6 = true;
             }
         }
 
