@@ -178,12 +178,26 @@
             background-color: #4CAF50;
             color: white;
         }
+
+        /* Анимация для скрытия круга */
+        @keyframes hideLoadingCircle {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Применить анимацию скрытия круга */
+        #loading-circle {
+            animation: rotate 2s linear infinite, hideLoadingCircle 1s forwards 2s;
+        }
+
     </style>
 </head>
 <body>
     <!-- Приветственный экран -->
     <div id="greeting-screen">
-        <div class="loading-animation"></div> <!-- Это анимация загрузки -->
+        <div class="loading-animation" id="loading-circle"></div> <!-- Это анимация загрузки -->
         Добро пожаловать, загружаем приложение
     </div>
 
@@ -336,11 +350,11 @@
         document.addEventListener("DOMContentLoaded", () => {
             const greetingScreen = document.getElementById('greeting-screen');
             const mainContent = document.getElementById('main-content');
-            const loadingAnimation = document.querySelector('.loading-animation');
+            const loadingCircle = document.getElementById('loading-circle');
 
-            // Скрыть круг сразу, как только начинается затухание
-            greetingScreen.addEventListener('animationstart', () => {
-                loadingAnimation.style.display = 'none';
+            // Скрываем круг загрузки сразу после завершения анимации
+            loadingCircle.addEventListener('animationend', () => {
+                loadingCircle.style.display = 'none'; // Скрыть только круг
             });
 
             // Ждем завершения анимации экрана загрузки
