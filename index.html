@@ -152,6 +152,22 @@
             height: 24px;
             filter: brightness(0) invert(1);
         }
+        /* Стили для наград */
+        .reward-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .reward-item {
+            background-color: #333;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        .reward-item.completed {
+            background-color: #4CAF50;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -181,7 +197,14 @@
         <!-- Вкладка Награды -->
         <div id="rewardsContent" class="tab-content">
             <h1>Награды</h1>
-            <p>Ваши достижения будут здесь.</p>
+            <ul id="rewardList" class="reward-list">
+                <li class="reward-item" id="reward1">Первая награда: 1 чек-ин</li>
+                <li class="reward-item" id="reward2">7 дней подряд: 7 чек-инов</li>
+                <li class="reward-item" id="reward3">30 чек-инов</li>
+                <li class="reward-item" id="reward4">100 чек-инов</li>
+                <li class="reward-item" id="reward5">14 чек-инов (2 недели)</li>
+                <li class="reward-item" id="reward6">21 чек-ин (3 недели)</li>
+            </ul>
         </div>
 
         <!-- Вкладка Статистика -->
@@ -221,45 +244,84 @@
         tg.expand();
 
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null, streak: 0 };
         const today = new Date().toISOString().split('T')[0];
+
+        const rewards = {
+            reward1: false,
+            reward2: false,
+            reward3: false,
+            reward4: false,
+            reward5: false,
+            reward6: false
+        };
 
         function updateCounter() {
             counterElement.innerText = checkinData.count || 0;
+            checkRewards();
+        }
+
+        function checkRewards() {
+            // Награда за первый чек-ин
+            if (checkinData.count >= 1 && !rewards.reward1) {
+                rewards.reward1 = true;
+                document.getElementById('reward1').classList.add('completed');
+            }
+
+            // Награда за 7 дней подряд
+            if (checkinData.streak >= 7 && !rewards.reward2) {
+                rewards.reward2 = true;
+                document.getElementById('reward2').classList.add('completed');
+            }
+
+            // Награда за 30 чек-инов
+            if (checkinData.count >= 30 && !rewards.reward3) {
+                rewards.reward3 = true;
+                document.getElementById('reward3').classList.add('completed');
+            }
+
+            // Награда за 100 чек-инов
+            if (checkinData.count >= 100 && !rewards.reward4) {
+                rewards.reward4 = true;
+                document.getElementById('reward4').classList.add('completed');
+            }
+
+            // Награда за 14 чек-инов (2 недели)
+            if (checkinData.count >= 14 && !rewards.reward5) {
+                rewards.reward5 = true;
+                document.getElementById('reward5').classList.add('completed');
+            }
+
+            // Награда за 21 чек-ин (3 недели)
+            if (checkinData.count >= 21 && !rewards.reward6) {
+                rewards.reward6 = true;
+                document.getElementById('reward6').classList.add('completed');
+            }
         }
 
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
                 checkinData.count++;
+                checkinData.streak = checkinData.lastCheckin === today ? checkinData.streak + 1 : 1;
                 checkinData.lastCheckin = today;
                 localStorage.setItem('checkinData', JSON.stringify(checkinData));
                 updateCounter();
-                alert("Чек-ин выполнен!");
-            } else {
-                alert("Вы уже сделали чек-ин сегодня.");
             }
         };
 
-        updateCounter();
-
         function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(`${tabName}Content`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Content').classList.add('active');
         }
 
-        // Новый код для скрытия экрана загрузки
-        document.addEventListener("DOMContentLoaded", () => {
-            const greetingScreen = document.getElementById('greeting-screen');
-            const mainContent = document.getElementById('main-content');
-
-            console.log('Screen loaded, hiding greeting screen...');
-            // Ждем завершения анимации экрана загрузки
-            greetingScreen.addEventListener('animationend', () => {
-                console.log('Animation ended, hiding greeting screen...');
-                greetingScreen.style.display = 'none'; // Полностью убираем экран загрузки
-                mainContent.style.display = 'block';   // Показываем основной контент
-            });
-        });
+        // Инициализация при загрузке страницы
+        window.onload = () => {
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('greeting-screen').style.display = 'none';
+            updateCounter();
+        };
     </script>
 </body>
 </html>
