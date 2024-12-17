@@ -336,6 +336,12 @@
         document.addEventListener("DOMContentLoaded", () => {
             const greetingScreen = document.getElementById('greeting-screen');
             const mainContent = document.getElementById('main-content');
+            const loadingAnimation = document.querySelector('.loading-animation');
+
+            // Скрыть круг сразу, как только начинается затухание
+            greetingScreen.addEventListener('animationstart', () => {
+                loadingAnimation.style.display = 'none';
+            });
 
             // Ждем завершения анимации экрана загрузки
             greetingScreen.addEventListener('animationend', () => {
