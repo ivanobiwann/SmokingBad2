@@ -193,11 +193,16 @@
             <h1>Награды</h1>
             <ul id="rewardList" class="reward-list">
                 <li class="reward-item" id="reward1">1 день без курения</li>
-                <li class="reward-item" id="reward2">1 неделя без курения</li>
-                <li class="reward-item" id="reward3">2 недели без курения</li>
-                <li class="reward-item" id="reward4">3 недели без курения</li>
-                <li class="reward-item" id="reward5">1 месяц без курения</li>
-                <li class="reward-item" id="reward6">2 месяца без курения</li>
+                <li class="reward-item" id="reward2">2 дня без курения</li>
+                <li class="reward-item" id="reward3">3 дня без курения</li>
+                <li class="reward-item" id="reward4">4 дня без курения</li>
+                <li class="reward-item" id="reward5">5 дней без курения</li>
+                <li class="reward-item" id="reward6">6 дней без курения</li>
+                <li class="reward-item" id="reward7">1 неделя без курения</li>
+                <li class="reward-item" id="reward8">2 недели без курения</li>
+                <li class="reward-item" id="reward9">3 недели без курения</li>
+                <li class="reward-item" id="reward10">1 месяц без курения</li>
+                <li class="reward-item" id="reward11">2 месяца без курения</li>
             </ul>
         </div>
 
@@ -253,24 +258,44 @@
                 document.getElementById('reward1').classList.add('completed');
             }
             // Проверка для второй награды
-            if (checkinData.count >= 7) {
+            if (checkinData.count >= 2) {
                 document.getElementById('reward2').classList.add('completed');
             }
             // Проверка для третьей награды
-            if (checkinData.count >= 14) {
+            if (checkinData.count >= 3) {
                 document.getElementById('reward3').classList.add('completed');
             }
             // Проверка для четвертой награды
-            if (checkinData.count >= 21) {
+            if (checkinData.count >= 4) {
                 document.getElementById('reward4').classList.add('completed');
             }
             // Проверка для пятой награды
-            if (checkinData.count >= 30) {
+            if (checkinData.count >= 5) {
                 document.getElementById('reward5').classList.add('completed');
             }
             // Проверка для шестой награды
-            if (checkinData.count >= 60) {
+            if (checkinData.count >= 6) {
                 document.getElementById('reward6').classList.add('completed');
+            }
+            // Проверка для седьмой награды
+            if (checkinData.count >= 7) {
+                document.getElementById('reward7').classList.add('completed');
+                }
+            // Проверка для восьмой награды
+            if (checkinData.count >= 14) {
+                document.getElementById('reward8').classList.add('completed');
+                }
+            // Проверка для девятой награды
+            if (checkinData.count >= 21) {
+                document.getElementById('reward9').classList.add('completed');
+                }
+            // Проверка для десятой награды
+            if (checkinData.count >= 30) {
+                document.getElementById('reward10').classList.add('completed');
+                }
+            // Проверка для одинадцатой награды
+            if (checkinData.count >= 60) {
+                document.getElementById('reward11').classList.add('completed');
             }
         }
 
