@@ -37,10 +37,10 @@
 
         /* Стили для индикатора загрузки */
         .loading-bar {
-            width: 70%;
-            height: 10px;
-            background-color: white;
-            margin-bottom: 20px;
+            width: 70%;                /* Ширина бара */
+            height: 10px;              /* Высота бара */
+            background-color: white;   /* Цвет бара */
+            margin-bottom: 20px;       /* Отступ между баром и текстом */
             position: relative;
             overflow: hidden;
         }
@@ -52,16 +52,18 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: #1E90FF;
-            animation: load 3s linear infinite;
+            background-color: #1E90FF; /* Цвет заполнителя бара */
+            animation: load 3s linear infinite; /* Анимация для заполнения бара */
         }
 
+        /* Анимация для прогресса загрузки */
         @keyframes load {
             to {
                 left: 100%;
             }
         }
 
+        /* Анимация исчезновения экрана загрузки */
         @keyframes fadeOut {
             to {
                 opacity: 0;
@@ -112,10 +114,10 @@
         .checkin-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 30vh;
-            margin-top: 20vh;
+            justify-content: center; /* Центрирование по вертикали */
+            align-items: center;     /* Центрирование по горизонтали */
+            height: 30vh;           /* Высота контейнера на весь экран */
+            margin-top: 20vh;        /* Отступ сверху для сдвига элементов вниз */
         }
 
         /* Нижнее меню */
@@ -128,7 +130,6 @@
             width: 100%;
             padding: 10px 0;
         }
-
         .menu-item {
             display: flex;
             flex-direction: column;
@@ -137,7 +138,6 @@
             color: white;
             font-size: 12px;
         }
-
         .menu-icon {
             width: 50px;
             height: 50px;
@@ -147,29 +147,10 @@
             justify-content: center;
             align-items: center;
         }
-
         .menu-icon img {
             width: 24px;
             height: 24px;
             filter: brightness(0) invert(1);
-        }
-
-        /* Стили для наград */
-        .reward {
-            margin: 10px;
-            padding: 10px;
-            background-color: #2E2E2E;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-
-        .reward-earned {
-            background-color: #1E90FF;
-            color: white;
-        }
-
-        .reward-unearned {
-            background-color: #444;
         }
     </style>
 </head>
@@ -200,9 +181,7 @@
         <!-- Вкладка Награды -->
         <div id="rewardsContent" class="tab-content">
             <h1>Награды</h1>
-            <div id="rewards-list">
-                <!-- Награды будут отображаться здесь -->
-            </div>
+            <p>Ваши достижения будут здесь.</p>
         </div>
 
         <!-- Вкладка Статистика -->
@@ -242,76 +221,43 @@
         tg.expand();
 
         const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null, rewards: [] };
+        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
         const today = new Date().toISOString().split('T')[0];
 
-        // Награды
-        const rewards = [
-            { id: 'first-day', name: 'Первый день без курения', condition: (data) => data.count >= 1 },
-            { id: 'one-week', name: '1 неделя без курения', condition: (data) => data.count >= 7 },
-            { id: 'one-month', name: '1 месяц без курения', condition: (data) => data.count >= 30 }
-        ];
-
-        // Функция обновления счетчика
         function updateCounter() {
             counterElement.innerText = checkinData.count || 0;
         }
 
-        // Функция обновления наград
-        function updateRewards() {
-            const rewardsList = document.getElementById('rewards-list');
-            rewardsList.innerHTML = '';  // Очищаем список наград
-            rewards.forEach(reward => {
-                const rewardElement = document.createElement('div');
-                rewardElement.classList.add('reward');
-                if (checkinData.rewards.includes(reward.id)) {
-                    rewardElement.classList.add('reward-earned');
-                    rewardElement.innerText = `✔️ ${reward.name}`;
-                } else {
-                    rewardElement.classList.add('reward-unearned');
-                    rewardElement.innerText = reward.name;
-                }
-                rewardsList.appendChild(rewardElement);
-            });
-        }
-
-        // Функция для чек-ина
         document.getElementById('checkin').onclick = () => {
             if (checkinData.lastCheckin !== today) {
                 checkinData.count++;
                 checkinData.lastCheckin = today;
-                // Проверяем и добавляем награды, если достигнуты условия
-                rewards.forEach(reward => {
-                    if (reward.condition(checkinData) && !checkinData.rewards.includes(reward.id)) {
-                        checkinData.rewards.push(reward.id);
-                    }
-                });
                 localStorage.setItem('checkinData', JSON.stringify(checkinData));
                 updateCounter();
-                updateRewards();
                 alert("Чек-ин выполнен!");
             } else {
                 alert("Вы уже сделали чек-ин сегодня.");
             }
         };
 
-        // Инициализация
         updateCounter();
-        updateRewards();
 
-        // Функция для переключения вкладок
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}Content`).classList.add('active');
         }
 
-        // Скрытие экрана загрузки
+        // Новый код для скрытия экрана загрузки
         document.addEventListener("DOMContentLoaded", () => {
             const greetingScreen = document.getElementById('greeting-screen');
             const mainContent = document.getElementById('main-content');
+
+            console.log('Screen loaded, hiding greeting screen...');
+            // Ждем завершения анимации экрана загрузки
             greetingScreen.addEventListener('animationend', () => {
-                greetingScreen.style.display = 'none';
-                mainContent.style.display = 'block';
+                console.log('Animation ended, hiding greeting screen...');
+                greetingScreen.style.display = 'none'; // Полностью убираем экран загрузки
+                mainContent.style.display = 'block';   // Показываем основной контент
             });
         });
     </script>
