@@ -32,7 +32,7 @@
             flex-direction: column;
             font-size: 24px;
             z-index: 1000;
-            animation: fadeOut 1s 2s forwards; /* Применение анимации исчезновения */
+            animation: fadeOut 1s 2s forwards;
         }
 
         /* Стили для анимации загрузки (круг) */
@@ -56,28 +56,12 @@
             }
         }
 
-        /* Анимация для исчезновения экрана загрузки */
+        /* Анимация исчезновения экрана загрузки */
         @keyframes fadeOut {
             to {
                 opacity: 0;
                 visibility: hidden;
             }
-        }
-
-        /* Анимация для плавного появления основного контента */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Основной контент */
-        #main-content {
-            animation: fadeIn 1s ease-out forwards;
-            display: none; /* Изначально скрыт */
         }
 
         /* Вкладки */
@@ -178,26 +162,12 @@
             background-color: #4CAF50;
             color: white;
         }
-
-        /* Анимация для скрытия круга */
-        @keyframes hideLoadingCircle {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
-        /* Применить анимацию скрытия круга */
-        #loading-circle {
-            animation: rotate 2s linear infinite, hideLoadingCircle 1s forwards 2s;
-        }
-
     </style>
 </head>
 <body>
     <!-- Приветственный экран -->
     <div id="greeting-screen">
-        <div class="loading-animation" id="loading-circle"></div> <!-- Это анимация загрузки -->
+        <div class="loading-animation"></div> <!-- Это анимация загрузки -->
         Добро пожаловать, загружаем приложение
     </div>
 
@@ -350,12 +320,6 @@
         document.addEventListener("DOMContentLoaded", () => {
             const greetingScreen = document.getElementById('greeting-screen');
             const mainContent = document.getElementById('main-content');
-            const loadingCircle = document.getElementById('loading-circle');
-
-            // Скрываем круг загрузки сразу после завершения анимации
-            loadingCircle.addEventListener('animationend', () => {
-                loadingCircle.style.display = 'none'; // Скрыть только круг
-            });
 
             // Ждем завершения анимации экрана загрузки
             greetingScreen.addEventListener('animationend', () => {
