@@ -199,12 +199,12 @@
         <div id="rewardsContent" class="tab-content">
             <h1>Награды</h1>
             <ul id="rewardList" class="reward-list">
-                <li class="reward-item" id="reward1">Первая награда: 1 чек-ин</li>
-                <li class="reward-item" id="reward2">7 дней подряд: 7 чек-инов</li>
-                <li class="reward-item" id="reward3">30 чек-инов</li>
-                <li class="reward-item" id="reward4">100 чек-инов</li>
-                <li class="reward-item" id="reward5">14 чек-инов (2 недели)</li>
-                <li class="reward-item" id="reward6">21 чек-ин (3 недели)</li>
+                <li class="reward-item" id="reward1">1 день без курения</li>
+                <li class="reward-item" id="reward2">1 неделя без курения</li>
+                <li class="reward-item" id="reward3">2 недели без курения</li>
+                <li class="reward-item" id="reward4">3 недели без курения</li>
+                <li class="reward-item" id="reward5">1 месяц без курения</li>
+                <li class="reward-item" id="reward6">2 месяца без курения</li>
             </ul>
         </div>
 
@@ -264,19 +264,19 @@
                 document.getElementById('reward2').classList.add('completed');
             }
             // Проверка для третьей награды
-            if (checkinData.count >= 30) {
+            if (checkinData.count >= 14) {
                 document.getElementById('reward3').classList.add('completed');
             }
             // Проверка для четвертой награды
-            if (checkinData.count >= 100) {
+            if (checkinData.count >= 21) {
                 document.getElementById('reward4').classList.add('completed');
             }
             // Проверка для пятой награды
-            if (checkinData.count >= 14) {
+            if (checkinData.count >= 30) {
                 document.getElementById('reward5').classList.add('completed');
             }
             // Проверка для шестой награды
-            if (checkinData.count >= 21) {
+            if (checkinData.count >= 60) {
                 document.getElementById('reward6').classList.add('completed');
             }
         }
