@@ -35,31 +35,24 @@
             animation: fadeOut 1s 2s forwards;
         }
 
-        /* Стили для индикатора загрузки */
-        .loading-bar {
-            width: 70%;                /* Ширина бара */
-            height: 10px;              /* Высота бара */
-            background-color: white;   /* Цвет бара */
-            margin-bottom: 20px;       /* Отступ между баром и текстом */
-            position: relative;
-            overflow: hidden;
+        /* Стили для анимации загрузки (круг) */
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            border: 10px solid #1E90FF;
+            border-top: 10px solid white;
+            border-radius: 50%;
+            animation: rotate 2s linear infinite; /* Анимация вращения */
+            margin-bottom: 20px;
         }
 
-        .loading-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background-color: #1E90FF; /* Цвет заполнителя бара */
-            animation: load 3s linear infinite; /* Анимация для заполнения бара */
-        }
-
-        /* Анимация для прогресса загрузки */
-        @keyframes load {
+        /* Анимация вращения */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
             to {
-                left: 100%;
+                transform: rotate(360deg);
             }
         }
 
@@ -174,7 +167,7 @@
 <body>
     <!-- Приветственный экран -->
     <div id="greeting-screen">
-        <div class="loading-bar"></div>
+        <div class="loading-animation"></div> <!-- Это анимация загрузки -->
         Добро пожаловать, загружаем приложение
     </div>
 
