@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quit Smoking App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем Lottie -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.0/lottie.min.js"></script>
+</head>
+<body>
+    <!-- Контейнер для анимации -->
+    <div id="lottie-container" style="width: 400px; height: 400px;"></div>
+
+    <script>
+        // Загружаем анимацию при помощи Lottie
+        lottie.loadAnimation({
+            container: document.getElementById('lottie-container'), // Контейнер для анимации
+            renderer: 'svg', // Формат рендеринга: 'svg', 'canvas' или 'html'
+            loop: true,      // Повторение анимации (true или false)
+            autoplay: true,  // Автоматический запуск
+            path: 'loading.json' // Путь к JSON-анимации (замените на путь к вашему файлу)
+        });
+    </script>
+</body>
+</html>
     <style>
         /* Основные стили */
         body {
@@ -33,27 +52,6 @@
             font-size: 24px;
             z-index: 1000;
             animation: fadeOut 1s 2s forwards;
-        }
-
-        /* Стили для анимации загрузки (круг) */
-        .loading-animation {
-            width: 80px;
-            height: 80px;
-            border: 10px solid #1E90FF;
-            border-top: 10px solid white;
-            border-radius: 50%;
-            animation: rotate 2s linear infinite; /* Анимация вращения */
-            margin-bottom: 20px;
-        }
-
-        /* Анимация вращения */
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
         }
 
         /* Анимация исчезновения экрана загрузки */
@@ -167,7 +165,7 @@
 <body>
     <!-- Приветственный экран -->
     <div id="greeting-screen">
-        <div class="loading-animation"></div> <!-- Это анимация загрузки -->
+        
         Добро пожаловать, загружаем приложение
     </div>
 
