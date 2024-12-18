@@ -5,23 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quit Smoking App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    document.addEventListener("DOMContentLoaded", function() {
-    const tg = window.Telegram.WebApp;
-
-    // Инициализация данных пользователя
-    const user_id = tg.initDataUnsafe.user.id;
-
-    // Пример отправки данных на сервер или обработки чек-ина
-    fetch('/save_checkin', {
-        method: 'POST',
-        body: JSON.stringify({ user_id, checkin: true }),
-        headers: { 'Content-Type': 'application/json' }
-    }).then(response => response.json())
-      .then(data => console.log('Check-in saved:', data))
-      .catch(error => console.error('Error:', error));
-
-    // Продолжение обработки...
-});
     <style>
         /* Основные стили */
         body {
