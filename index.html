@@ -7,23 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Подключаем Lottie -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.0/lottie.min.js"></script>
-</head>
-<body>
-    <!-- Контейнер для анимации -->
-    <div id="lottie-container" style="width: 400px; height: 400px;"></div>
-
-    <script>
-        // Загружаем анимацию при помощи Lottie
-        lottie.loadAnimation({
-            container: document.getElementById('lottie-container'), // Контейнер для анимации
-            renderer: 'svg', // Формат рендеринга: 'svg', 'canvas' или 'html'
-            loop: true,      // Повторение анимации (true или false)
-            autoplay: true,  // Автоматический запуск
-            path: 'loading.json' // Путь к JSON-анимации (замените на путь к вашему файлу)
-        });
-    </script>
-</body>
-</html>
     <style>
         /* Основные стили */
         body {
@@ -51,7 +34,7 @@
             flex-direction: column;
             font-size: 24px;
             z-index: 1000;
-            animation: fadeOut 1s 2s forwards;
+            animation: fadeOut 2s forwards;
         }
 
         /* Анимация исчезновения экрана загрузки */
@@ -60,6 +43,17 @@
                 opacity: 0;
                 visibility: hidden;
             }
+        }
+
+        /* Контейнер для анимации */
+        #lottie-container {
+            width: 200px; /* Размеры анимации */
+            height: 200px;
+        }
+
+        /* Основной контент */
+        #main-content {
+            display: none;
         }
 
         /* Вкладки */
@@ -72,6 +66,7 @@
             display: block;
         }
 
+        /* Стили для элементов */
         h1 {
             color: #1E90FF;
         }
@@ -105,10 +100,10 @@
         .checkin-container {
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Центрирование по вертикали */
-            align-items: center;     /* Центрирование по горизонтали */
-            height: 30vh;           /* Высота контейнера на весь экран */
-            margin-top: 20vh;        /* Отступ сверху для сдвига элементов вниз */
+            justify-content: center;
+            align-items: center;
+            height: 30vh;
+            margin-top: 20vh;
         }
 
         /* Нижнее меню */
@@ -121,57 +116,17 @@
             width: 100%;
             padding: 10px 0;
         }
-        .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: white;
-            font-size: 12px;
-        }
-        .menu-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #1E90FF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .menu-icon img {
-            width: 24px;
-            height: 24px;
-            filter: brightness(0) invert(1);
-        }
-
-        /* Стили для наград */
-        .reward-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .reward-item {
-            background-color: #333;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 18px;
-        }
-        .reward-item.completed {
-            background-color: #4CAF50;
-            color: white;
-        }
     </style>
 </head>
 <body>
     <!-- Приветственный экран -->
     <div id="greeting-screen">
-        
-        Добро пожаловать, загружаем приложение
+        <div id="lottie-container"></div> <!-- Контейнер для анимации -->
+        Добро пожаловать, загружаем приложение...
     </div>
 
     <!-- Основной контент -->
-    <div id="main-content" style="display: none;">
-        <!-- Вкладка Главная -->
+    <div id="main-content">
         <div id="homeContent" class="tab-content active">
             <h1>Главная</h1>
             <div class="checkin-container">
@@ -179,154 +134,30 @@
                 <button id="checkin">Чек-ин</button>
             </div>
         </div>
-
-        <!-- Вкладка Рейтинг -->
-        <div id="rankingContent" class="tab-content">
-            <h1>Рейтинг</h1>
-            <p>Здесь будет информация о рейтинге.</p>
-        </div>
-
-        <!-- Вкладка Награды -->
-        <div id="rewardsContent" class="tab-content">
-            <h1>Награды</h1>
-            <ul id="rewardList" class="reward-list">
-                <li class="reward-item" id="reward1">1 день без курения</li>
-                <li class="reward-item" id="reward2">2 дня без курения</li>
-                <li class="reward-item" id="reward3">3 дня без курения</li>
-                <li class="reward-item" id="reward4">4 дня без курения</li>
-                <li class="reward-item" id="reward5">5 дней без курения</li>
-                <li class="reward-item" id="reward6">6 дней без курения</li>
-                <li class="reward-item" id="reward7">1 неделя без курения</li>
-                <li class="reward-item" id="reward8">2 недели без курения</li>
-                <li class="reward-item" id="reward9">3 недели без курения</li>
-                <li class="reward-item" id="reward10">1 месяц без курения</li>
-                <li class="reward-item" id="reward11">2 месяца без курения</li>
-            </ul>
-        </div>
-
-        <!-- Вкладка Статистика -->
-        <div id="statsContent" class="tab-content">
-            <h1>Статистика</h1>
-            <canvas id="progressChart" width="300" height="300"></canvas>
-        </div>
-
-        <!-- Вкладка Профиль -->
-        <div id="profileContent" class="tab-content">
-            <h1>Профиль</h1>
-            <p>Информация о вашем профиле.</p>
-        </div>
-
-        <!-- Нижнее меню -->
-        <nav class="bottom-menu">
-            <div class="menu-item" onclick="showTab('home')">
-                <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/home.png" alt="Главная"></div> Главная
-            </div>
-            <div class="menu-item" onclick="showTab('ranking')">
-                <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/trophy.png" alt="Рейтинг"></div> Рейтинг
-            </div>
-            <div class="menu-item" onclick="showTab('rewards')">
-                <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/medal.png" alt="Награды"></div> Награды
-            </div>
-            <div class="menu-item" onclick="showTab('stats')">
-                <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/bar-chart.png" alt="Статистика"></div> Статистика
-            </div>
-            <div class="menu-item" onclick="showTab('profile')">
-                <div class="menu-icon"><img src="https://img.icons8.com/ios-filled/50/user.png" alt="Профиль"></div> Профиль
-            </div>
-        </nav>
+        <!-- Вкладки и другие элементы... -->
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+        // Загружаем анимацию при помощи Lottie
+        lottie.loadAnimation({
+            container: document.getElementById('lottie-container'), // Контейнер для анимации
+            renderer: 'svg', // Формат рендеринга: 'svg', 'canvas' или 'html'
+            loop: true,      // Повторение анимации (true или false)
+            autoplay: true,  // Автоматический запуск
+            path: 'loading.json' // Путь к JSON-анимации
+        });
 
-        const counterElement = document.getElementById('checkin-count');
-        let checkinData = JSON.parse(localStorage.getItem('checkinData')) || { count: 0, lastCheckin: null };
-        const today = new Date().toISOString().split('T')[0];
-
-        function updateCounter() {
-            counterElement.innerText = checkinData.count || 0;
-            checkRewards();
-        }
-
-        function checkRewards() {
-            console.log('Проверка наград...');
-            // Проверка для первой награды
-            if (checkinData.count >= 1) {
-                document.getElementById('reward1').classList.add('completed');
-            }
-            // Проверка для второй награды
-            if (checkinData.count >= 2) {
-                document.getElementById('reward2').classList.add('completed');
-            }
-            // Проверка для третьей награды
-            if (checkinData.count >= 3) {
-                document.getElementById('reward3').classList.add('completed');
-            }
-            // Проверка для четвертой награды
-            if (checkinData.count >= 4) {
-                document.getElementById('reward4').classList.add('completed');
-            }
-            // Проверка для пятой награды
-            if (checkinData.count >= 5) {
-                document.getElementById('reward5').classList.add('completed');
-            }
-            // Проверка для шестой награды
-            if (checkinData.count >= 6) {
-                document.getElementById('reward6').classList.add('completed');
-            }
-            // Проверка для седьмой награды
-            if (checkinData.count >= 7) {
-                document.getElementById('reward7').classList.add('completed');
-                }
-            // Проверка для восьмой награды
-            if (checkinData.count >= 14) {
-                document.getElementById('reward8').classList.add('completed');
-                }
-            // Проверка для девятой награды
-            if (checkinData.count >= 21) {
-                document.getElementById('reward9').classList.add('completed');
-                }
-            // Проверка для десятой награды
-            if (checkinData.count >= 30) {
-                document.getElementById('reward10').classList.add('completed');
-                }
-            // Проверка для одинадцатой награды
-            if (checkinData.count >= 60) {
-                document.getElementById('reward11').classList.add('completed');
-            }
-        }
-
-        document.getElementById('checkin').onclick = () => {
-            if (checkinData.lastCheckin !== today) {
-                checkinData.count++;
-                checkinData.lastCheckin = today;
-                localStorage.setItem('checkinData', JSON.stringify(checkinData));
-                updateCounter();
-                alert("Чек-ин выполнен!");
-            } else {
-                alert("Вы уже сделали чек-ин сегодня.");
-            }
-        };
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(`${tabName}Content`).classList.add('active');
-        }
-
-        // Новый код для скрытия экрана загрузки
+        // Скрываем экран загрузки и показываем основной контент
         document.addEventListener("DOMContentLoaded", () => {
             const greetingScreen = document.getElementById('greeting-screen');
             const mainContent = document.getElementById('main-content');
 
-            // Ждем завершения анимации экрана загрузки
+            // После окончания анимации на экране загрузки, скрываем его и показываем основной контент
             greetingScreen.addEventListener('animationend', () => {
-                greetingScreen.style.display = 'none'; // Полностью убираем экран загрузки
-                mainContent.style.display = 'block';   // Показываем основной контент
+                greetingScreen.style.display = 'none';
+                mainContent.style.display = 'block';
             });
         });
-
-        updateCounter();
     </script>
 </body>
 </html>
