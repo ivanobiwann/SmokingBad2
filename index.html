@@ -288,7 +288,7 @@
             const mainContent = document.getElementById('main-content');
 
             // Загружаем анимацию при помощи Lottie
-            lottie.loadAnimation({
+            const animation = lottie.loadAnimation({
                 container: document.getElementById('lottie-container'), // Контейнер для анимации
                 renderer: 'svg', // Формат рендеринга: 'svg', 'canvas' или 'html'
                 loop: true,      // Повторение анимации
@@ -296,11 +296,11 @@
                 path: 'loading.json' // Путь к JSON-анимации
             });
 
-            // Ждем завершения анимации экрана загрузки
-            setTimeout(() => {
+            // Дождемся завершения анимации и скрываем экран загрузки
+            animation.addEventListener('complete', () => {
                 greetingScreen.style.display = 'none'; // Убираем экран загрузки
                 mainContent.style.display = 'block';   // Показываем основной контент
-            }, 3000); // Показываем основной контент через 3 секунды
+            });
         });
 
         updateCounter();
