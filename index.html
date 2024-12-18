@@ -36,25 +36,25 @@
         }
 
         /* Стили для анимации загрузки (круг) */
-        .loading-animation {
-            width: 80px;
-            height: 80px;
-            border: 10px solid #1E90FF;
-            border-top: 10px solid white;
-            border-radius: 50%;
-            animation: rotate 2s linear infinite; /* Анимация вращения */
-            margin-bottom: 20px;
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+    const greetingScreen = document.getElementById('greeting-screen');
+    const mainContent = document.getElementById('main-content');
 
-        /* Анимация вращения */
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
+    // Загружаем Lottie-анимацию
+    lottie.loadAnimation({
+        container: document.getElementById('lottie-loading'), // Контейнер для анимации
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'loading.json' // Убедитесь, что файл "loading.json" находится рядом с вашим HTML-файлом
+    });
+
+    // Скрываем экран загрузки после завершения анимации
+    greetingScreen.addEventListener('animationend', () => {
+        greetingScreen.style.display = 'none';
+        mainContent.style.display = 'block';
+    });
+});
 
         /* Анимация исчезновения экрана загрузки */
         @keyframes fadeOut {
@@ -167,7 +167,11 @@
 <body>
     <!-- Приветственный экран -->
     <div id="greeting-screen">
-        <div class="loading-animation"></div> <!-- Это анимация загрузки -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.0/lottie.min.js"></script>
+
+    <!-- Новый контейнер для Lottie-анимации -->
+    <div id="lottie-loading"></div>
+        
         Добро пожаловать, загружаем приложение
     </div>
 
