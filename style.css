@@ -31,11 +31,11 @@
         .loading-animation {
             width: 50px;
             height: 50px;
-            border: 5px solid #1E90FF;
+            border: 10px solid #1E90FF;
             border-top: 10px solid white;
             border-radius: 50%;
             animation: rotate 2s linear infinite; /* Анимация вращения */
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         /* Анимация вращения */
@@ -145,7 +145,7 @@
         }
         .reward-item {
             background-color: #333;
-            margin: 20px 0;
+            margin: 10px;
             padding: 20px;
             border-radius: 10px;
             font-size: 18px;
