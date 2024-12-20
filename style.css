@@ -156,3 +156,7 @@
             background-color: #1E90FF;
             color: white;
         }
+        .scroll {
+        height: 200px;  /* Высота блока */
+        overflow-y: scroll;  /* Включаем вертикальную прокрутку */
+        }
