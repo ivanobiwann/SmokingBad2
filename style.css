@@ -1,1 +1,156 @@
+/* Основные стили */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #1E1E1E;
+            color: white;
+            overflow: hidden;
+        }
 
+        /* Приветственный экран */
+        #greeting-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #1E90FF;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 24px;
+            z-index: 1000;
+            animation: fadeOut 1s 2s forwards;
+        }
+
+        /* Стили для анимации загрузки (круг) */
+        .loading-animation {
+            width: 80px;
+            height: 80px;
+            border: 10px solid #1E90FF;
+            border-top: 10px solid white;
+            border-radius: 30%;
+            animation: rotate 2s linear infinite; /* Анимация вращения */
+            margin-bottom: 20px;
+        }
+
+        /* Анимация вращения */
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Анимация исчезновения экрана загрузки */
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Вкладки */
+        .tab-content {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        h1 {
+            color: #1E90FF;
+        }
+
+        button {
+            background-color: #1E90FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #1C86EE;
+        }
+
+        .counter {
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            margin: 30px auto;
+            border-radius: 50%;
+            background-color: #1E90FF;
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        .checkin-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Центрирование по вертикали */
+            align-items: center;     /* Центрирование по горизонтали */
+            height: 30vh;           /* Высота контейнера на весь экран */
+            margin-top: 20vh;        /* Отступ сверху для сдвига элементов вниз */
+        }
+
+        /* Нижнее меню */
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            background-color: #2E2E2E;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 0;
+        }
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            font-size: 12px;
+        }
+        .menu-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #1E90FF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .menu-icon img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Стили для наград */
+        .reward-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .reward-item {
+            background-color: #333;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        .reward-item.completed {
+            background-color: #1E90FF;
+            color: white;
+        }
