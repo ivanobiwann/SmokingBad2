@@ -145,10 +145,12 @@
         }
         .reward-item {
             background-color: #333;
-            margin: 1px 0;
-            padding: 100px;
+            margin: 20px;
+            padding: 20px;
             border-radius: 10px;
             font-size: 18px;
+            font-weight: bold;
+                
         }
         .reward-item.completed {
             background-color: #1E90FF;
