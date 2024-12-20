@@ -157,6 +157,6 @@
             color: white;
         }
         .scroll {
-        height: 200px;  /* Высота блока */
+        height: 2000px;  /* Высота блока */
         overflow-y: scroll;  /* Включаем вертикальную прокрутку */
         }
